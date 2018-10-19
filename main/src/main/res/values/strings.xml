@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DroidGankIO</string>
+
+    <string name="dg_nav_home">首屏</string>
+    <string name="dg_nav_xiandu">闲读</string>
+    <string name="dg_nav_mine">我的</string>
+
 </resources>
