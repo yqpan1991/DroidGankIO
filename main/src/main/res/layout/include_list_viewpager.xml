@@ -37,6 +37,10 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabSelectedTextColor="#000070"
+            app:tabTextColor="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

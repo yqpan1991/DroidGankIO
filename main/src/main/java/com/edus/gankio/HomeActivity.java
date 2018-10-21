@@ -21,6 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.edus.gankio.ui.adapter.FragmentFactory;
+import com.edus.gankio.ui.adapter.HomeFragmentType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,9 +96,85 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        MyPagerAdapter adapter = new MyPagerAdapter(this);
-        viewPager.setAdapter(adapter);
+        List<PageInfo> pageInfoList = new ArrayList<>();
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_home, HomeFragmentType.HOME));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_android, HomeFragmentType.ANDROID));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_ios, HomeFragmentType.IOS));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_recommend, HomeFragmentType.RECOMMEND));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_app, HomeFragmentType.APP));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_videos, HomeFragmentType.VIDEO));
+        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(this, getSupportFragmentManager(), pageInfoList);
+        viewPager.setAdapter(homePagerAdapter);
     }
+
+    private PageInfo buildPageInfo(int titleRes, HomeFragmentType homeFragmentType){
+        return new PageInfo(titleRes, homeFragmentType);
+    }
+
+    private static class PageInfo{
+        private int titleRes;
+        private HomeFragmentType fragmentType;
+
+        public PageInfo(int titleRes, HomeFragmentType fragmentType){
+            this.titleRes = titleRes;
+            this.fragmentType = fragmentType;
+        }
+
+        public int getTitleRes() {
+            return titleRes;
+        }
+
+        public HomeFragmentType getFragmentType() {
+            return fragmentType;
+        }
+    }
+
+    private static class HomePagerAdapter extends FragmentPagerAdapter{
+        private List<PageInfo> mPageInfoList = new ArrayList<>();
+        private Context mContext;
+
+        public HomePagerAdapter(Context context, FragmentManager fm, List<PageInfo> pageInfoList) {
+            super(fm);
+            if(context == null){
+                throw new RuntimeException("Context cannot be null");
+            }
+            mContext = context;
+            if(pageInfoList != null && !pageInfoList.isEmpty()){
+                mPageInfoList.addAll(pageInfoList);
+            }
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            PageInfo pageInfo = null;
+            if(position >= 0 && position < mPageInfoList.size()){
+                pageInfo = mPageInfoList.get(position);
+            }
+            if(pageInfo == null){
+                pageInfo = new PageInfo(R.string.dg_title_tab_error, HomeFragmentType.ERROR);
+            }
+            return FragmentFactory.getHomeFragment(pageInfo.getFragmentType());
+        }
+
+        @Override
+        public int getCount() {
+            return mPageInfoList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            PageInfo pageInfo = null;
+            if(position >= 0 && position < mPageInfoList.size()){
+                pageInfo = mPageInfoList.get(position);
+            }
+            if(pageInfo == null){
+                pageInfo = new PageInfo(R.string.dg_title_tab_error, HomeFragmentType.ERROR);
+            }
+            return mContext.getResources().getString(pageInfo.getTitleRes());
+        }
+    }
+
+
 
     private static class MyPagerAdapter extends PagerAdapter{
         private Context mContext;

@@ -5,4 +5,13 @@
     <string name="dg_nav_xiandu">闲读</string>
     <string name="dg_nav_mine">我的</string>
 
+    <string name="dg_title_tab_home">干货列表</string>
+    <string name="dg_title_tab_android">Android</string>
+    <string name="dg_title_tab_ios">iOS</string>
+    <string name="dg_title_tab_recommend">瞎推荐</string>
+    <string name="dg_title_tab_app">福利</string>
+    <string name="dg_title_tab_videos">休息视频</string>
+    <string name="dg_title_tab_error">错误</string>
+
+
 </resources>
