@@ -1,13 +1,16 @@
-package com.edus.gankio.ui.adapter;
+package com.edus.gankio.ui.fragment;
+
+import android.support.v4.app.Fragment;
 
 import com.edus.gankio.ui.SampleFragment;
+import com.edus.gankio.ui.adapter.HomeFragmentType;
 
 /**
  * Created by panda on 2018/10/21.
  */
 
 public class FragmentFactory {
-    public static SampleFragment getHomeFragment(HomeFragmentType homeFragmentType){
+    public static Fragment getHomeFragment(HomeFragmentType homeFragmentType){
         /**
          *  HOME,
          ANDROID,
@@ -17,7 +20,7 @@ public class FragmentFactory {
          VIDEO
          * */
         if(homeFragmentType == HomeFragmentType.HOME){
-            return SampleFragment.getInstance(null);
+            return HomePageHomeFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.ANDROID){
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.IOS){

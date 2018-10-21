@@ -1,6 +1,9 @@
 package com.edus.gankio.net;
 
+import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.Demo;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -20,5 +23,8 @@ public interface GitApi {
 
     @GET("2/1")
     public Call<Demo> getFeed();
+
+    @GET("day/history")
+    Call<CommonResult<List<String>>> getGanHuoDate();
 
 }

@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.edus.gankio.ui.adapter.FragmentFactory;
+import com.edus.gankio.ui.fragment.FragmentFactory;
 import com.edus.gankio.ui.adapter.HomeFragmentType;
 
 import java.util.ArrayList;
@@ -104,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_app, HomeFragmentType.APP));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_videos, HomeFragmentType.VIDEO));
         HomePagerAdapter homePagerAdapter = new HomePagerAdapter(this, getSupportFragmentManager(), pageInfoList);
+        viewPager.setOffscreenPageLimit(pageInfoList.size());
         viewPager.setAdapter(homePagerAdapter);
     }
 
