@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <declare-styleable name="LoadingAndResultContainer">
+        <attr name="loading_id" format="reference"/>
+        <attr name="content_id" format="reference"/>
+        <attr name="error_id" format="reference"/>
+        <attr name="empty_id" format="reference"/>
+        <attr name="default_status" format="enum">
+            <enum name="loading" value="0"/>
+            <enum name="content" value="1"/>
+            <enum name="error" value="2"/>
+            <enum name="empty" value="3"/>
+        </attr>
+    </declare-styleable>
+
 </resources>

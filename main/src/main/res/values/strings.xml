@@ -13,5 +13,9 @@
     <string name="dg_title_tab_videos">休息视频</string>
     <string name="dg_title_tab_error">错误</string>
 
+    <string name="dg_empty_default">空空如也</string>
+    <string name="dg_empty_error">出错啦</string>
+    <string name="dg_empty_error_retry">重试</string>
+
 
 </resources>

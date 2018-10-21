@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_content"
+    <com.edus.gankio.ui.widget.LoadingAndResultContainer
+        android:id="@+id/larc_container"
+        app:loading_id="@layout/layout_default_loading"
+        app:empty_id="@layout/layout_default_empty"
+        app:error_id="@layout/layout_default_error"
+        app:content_id="@layout/layout_home_page_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
