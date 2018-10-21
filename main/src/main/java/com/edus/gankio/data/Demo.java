@@ -9,15 +9,15 @@ public class Demo {
     @SerializedName("error")
     @Expose
     public Boolean error;
-    @SerializedName("results")
+    @SerializedName("commonResources")
     @Expose
-    public List<Result> results = null;
+    public List<CommonResource> commonResources = null;
 
     @Override
     public String toString() {
         return "Demo{" +
                 "error=" + error +
-                ", results=" + results +
+                ", commonResources=" + commonResources +
                 '}';
     }
 }

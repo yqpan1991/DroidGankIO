@@ -9,7 +9,7 @@ import java.util.List;
  * Created by panda on 2017/5/9.
  */
 
-public class Result {
+public class CommonResource {
 
     @SerializedName("_id")
     @Expose
@@ -44,7 +44,7 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Result{" +
+        return "CommonResource{" +
                 "id='" + id + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", desc='" + desc + '\'' +

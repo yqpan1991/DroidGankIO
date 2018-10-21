@@ -96,14 +96,18 @@ public class LoadingAndResultContainer extends FrameLayout {
             mErrorView = LayoutInflater.from(getContext()).inflate(errorResId, this, false);
             addView(mErrorView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
+        DISPLAY_STATUS displayStatus = DISPLAY_STATUS.LOADING;
         if(defaultStatus != null){
-            mDisplayStatus = DISPLAY_STATUS.fromValue(defaultStatus.intValue());
+            displayStatus = DISPLAY_STATUS.fromValue(defaultStatus.intValue());
         }
         ta.recycle();
-        refreshStatus();
+        refreshStatus(displayStatus);
     }
 
-    private void refreshStatus() {
+    private void refreshStatus(DISPLAY_STATUS displayStatus) {
+        if(isSameStatus(displayStatus)){
+            return;
+        }
         if(mDisplayStatus == DISPLAY_STATUS.LOADING){
             showLoading();
         }else if(mDisplayStatus == DISPLAY_STATUS.COMMON_RESULT){

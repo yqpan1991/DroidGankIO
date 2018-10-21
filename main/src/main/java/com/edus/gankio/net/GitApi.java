@@ -1,5 +1,6 @@
 package com.edus.gankio.net;
 
+import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.Demo;
 
@@ -26,5 +27,8 @@ public interface GitApi {
 
     @GET("day/history")
     Call<CommonResult<List<String>>> getGanHuoDate();
+
+    @GET("{resourceType}/{pageSize}/{pageIndex}")
+    public Call<CommonResult<List<CommonResource>>> getResource(@Path("resourceType") String resourceType, @Path("pageSize") int pageSize, @Path("pageIndex") int pageIndex);
 
 }

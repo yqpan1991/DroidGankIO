@@ -6,10 +6,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.edus.gankio.R;
+import com.edus.gankio.data.CommonResource;
+import com.edus.gankio.data.CommonResult;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class HomePageHomeAdapter extends BaseRvAdapter<HomePageHomeAdapter.ViewHolder, String> {
-    public HomePageHomeAdapter(){
+public class HomePageAndroidAdapter extends BaseRvAdapter<HomePageAndroidAdapter.ViewHolder, CommonResource> {
+    public HomePageAndroidAdapter(){
 
     }
 
@@ -20,13 +24,13 @@ public class HomePageHomeAdapter extends BaseRvAdapter<HomePageHomeAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String data = getDataTypeByPosition(position);
+        CommonResource data = getDataTypeByPosition(position);
         holder.refresh(data);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mTvContent;
-        private String mData;
+        private CommonResource mData;
 
 
         public ViewHolder(ViewGroup parent) {
@@ -34,9 +38,9 @@ public class HomePageHomeAdapter extends BaseRvAdapter<HomePageHomeAdapter.ViewH
             mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
 
         }
-        public void refresh(String data){
+        public void refresh(CommonResource data){
             mData = data;
-            mTvContent.setText(mData);
+            mTvContent.setText(mData.desc);
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.edus.gankio.net;
 
+import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
+import com.edus.gankio.library.utils.Singleton;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -11,14 +13,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ApiService {
-    private static final ApiService sInstance = new ApiService();
+
+    private static Singleton<ApiService> mSingleton = new Singleton<ApiService>() {
+        @Override
+        protected ApiService create() {
+            return new ApiService();
+        }
+    };
 
     private ApiService(){
 
     }
 
     public static ApiService getInstance(){
-        return sInstance;
+        return mSingleton.get();
     }
 
 
@@ -28,5 +36,13 @@ public class ApiService {
         GitApi gitApi = retrofit.create(GitApi.class);
         Call<CommonResult<List<String>>> ganHuoDate = gitApi.getGanHuoDate();
         ganHuoDate.enqueue(AdapterRestfulCallback.build(callback));
+    }
+
+    public void getAndroidResource(DataCallback<CommonResult<List<CommonResource>>> callback, int pageSize, int pageIndex){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/data/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+        Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("Android", pageSize, pageIndex);
+        android.enqueue(AdapterRestfulCallback.build(callback));
     }
 }
