@@ -36,7 +36,7 @@ public class SampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         TextView textView = new TextView(inflater.getContext());
         return textView;
-//        return super.onCreateView(inflater, container, savedInstanceState);
+//        return super.onAttachedView(inflater, container, savedInstanceState);
     }
 
 

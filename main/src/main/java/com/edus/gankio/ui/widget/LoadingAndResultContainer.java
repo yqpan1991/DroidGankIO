@@ -4,18 +4,24 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.edus.gankio.R;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 页面从加载中,到加载的结果(正常数据结果页,空页面,错误页面)
  */
 public class LoadingAndResultContainer extends FrameLayout {
+    static final ThreadLocal<Map<String, Constructor<LoadingAndResultContainer.Behavior>>> sConstructors =
+            new ThreadLocal<>();
 
     public enum DISPLAY_STATUS {
         LOADING(0),
@@ -75,26 +81,34 @@ public class LoadingAndResultContainer extends FrameLayout {
             return;
         }
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.LoadingAndResultContainer, defStyleAttr, 0);
-        int loadingResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_loading_id, 0);
-        int contentResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_content_id, 0);
-        int emptyResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_empty_id, 0);
-        int errorResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_error_id, 0);
-        Integer defaultStatus = ta.getInteger(R.styleable.LoadingAndResultContainer_default_status, DISPLAY_STATUS.LOADING.getStatus());
-        if(loadingResId > 0){
-            mLoadingView = LayoutInflater.from(getContext()).inflate(loadingResId, this, false);
-            addView(mLoadingView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        int loadingStringResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_loading_behavior, 0);
+        int contentStringResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_content_behavior, 0);
+        int emptyStringResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_empty_behavior, 0);
+        int errorStringResId = ta.getResourceId(R.styleable.LoadingAndResultContainer_error_behavior, 0);
+        Integer defaultStatus = ta.getInteger(R.styleable.LoadingAndResultContainer_default_status_v2, DISPLAY_STATUS.LOADING.getStatus());
+        if(loadingStringResId > 0){
+            Behavior behavior = parseBehavior(getContext(), getResources().getString(loadingStringResId));
+            if(behavior != null){
+                mLoadingView = behavior.onAttachedView(this);
+            }
         }
-        if(contentResId > 0){
-            mContentView = LayoutInflater.from(getContext()).inflate(contentResId, this, false);
-            addView(mContentView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if(contentStringResId > 0){
+            Behavior behavior = parseBehavior(getContext(), getResources().getString(contentStringResId));
+            if(behavior != null){
+                mContentView = behavior.onAttachedView(this);
+            }
         }
-        if(emptyResId > 0){
-            mEmptyView = LayoutInflater.from(getContext()).inflate(emptyResId, this, false);
-            addView(mEmptyView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if(emptyStringResId > 0){
+            Behavior behavior = parseBehavior(getContext(), getResources().getString(emptyStringResId));
+            if(behavior != null){
+                mEmptyView = behavior.onAttachedView(this);
+            }
         }
-        if(errorResId > 0){
-            mErrorView = LayoutInflater.from(getContext()).inflate(errorResId, this, false);
-            addView(mErrorView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if(errorStringResId > 0){
+            Behavior behavior = parseBehavior(getContext(), getResources().getString(errorStringResId));
+            if(behavior != null){
+                mErrorView = behavior.onAttachedView(this);
+            }
         }
         DISPLAY_STATUS displayStatus = DISPLAY_STATUS.LOADING;
         if(defaultStatus != null){
@@ -250,4 +264,33 @@ public class LoadingAndResultContainer extends FrameLayout {
         }
     }
 
+    public interface Behavior {
+        View onAttachedView(ViewGroup parentView);
+    }
+
+    static LoadingAndResultContainer.Behavior parseBehavior(Context context, String name) {
+        if (TextUtils.isEmpty(name)) {
+            return null;
+        }
+
+        final String fullName = name;
+        try {
+            Map<String, Constructor<LoadingAndResultContainer.Behavior>> constructors = sConstructors.get();
+            if (constructors == null) {
+                constructors = new HashMap<>();
+                sConstructors.set(constructors);
+            }
+            Constructor<LoadingAndResultContainer.Behavior> c = constructors.get(fullName);
+            if (c == null) {
+                final Class<LoadingAndResultContainer.Behavior> clazz = (Class<LoadingAndResultContainer.Behavior>) Class.forName(fullName, true,
+                        context.getClassLoader());
+                c = clazz.getConstructor(null);
+                c.setAccessible(true);
+                constructors.put(fullName, c);
+            }
+            return c.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Could not inflate Behavior subclass " + fullName, e);
+        }
+    }
 }

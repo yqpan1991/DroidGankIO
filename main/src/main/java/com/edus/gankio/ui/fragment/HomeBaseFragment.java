@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.edus.gankio.R;
 import com.edus.gankio.ui.adapter.BaseRvAdapter;
-import com.edus.gankio.ui.adapter.HomePageHomeAdapter;
 import com.edus.gankio.ui.widget.LoadingAndResultContainer;
 
 
@@ -39,6 +38,7 @@ public abstract class HomeBaseFragment<DataType> extends Fragment {
     private void initView(View rootView) {
         mLarcContent = (LoadingAndResultContainer) rootView.findViewById(R.id.larc_container);
         mRvContent = (RecyclerView) mLarcContent.getContentView().findViewById(R.id.rv_content);
+        //todo: 此处需要替换为包装后的view
         mTvRetry = (TextView) mLarcContent.getErrorView().findViewById(R.id.tv_retry);
     }
 
