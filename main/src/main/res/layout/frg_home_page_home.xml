@@ -6,10 +6,10 @@
 
     <com.edus.gankio.ui.widget.LoadingAndResultContainer
         android:id="@+id/larc_container"
-        app:loading_behavior="@string/dg_larcv2_common_loading_behavior"
-        app:empty_behavior="@string/dg_larcv2_common_empty_behavior"
-        app:error_behavior="@string/dg_larcv2_common_error_behavior"
-        app:content_behavior="@string/dg_larcv2_common_result_behavior"
+        app:loading_behavior="@string/dg_larcv_common_loading_behavior"
+        app:empty_behavior="@string/dg_larcv_common_empty_behavior"
+        app:error_behavior="@string/dg_larcv_common_error_behavior"
+        app:content_behavior="@string/dg_larcv_common_result_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

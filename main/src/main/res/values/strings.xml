@@ -17,10 +17,10 @@
     <string name="dg_empty_error">出错啦</string>
     <string name="dg_empty_error_retry">重试</string>
 
-    <string name="dg_larcv2_common_result_behavior" translatable="false">com.edus.gankio.ui.widget.CommonResultListBehavior</string>
-    <string name="dg_larcv2_common_empty_behavior" translatable="false">com.edus.gankio.ui.widget.EmptyViewDefaultBehavior</string>
-    <string name="dg_larcv2_common_error_behavior" translatable="false">com.edus.gankio.ui.widget.ErrorViewDefaultBehavior</string>
-    <string name="dg_larcv2_common_loading_behavior" translatable="false">com.edus.gankio.ui.widget.LoadingViewDefaultBehavior</string>
+    <string name="dg_larcv_common_result_behavior" translatable="false">com.edus.gankio.ui.widget.CommonResultListBehavior</string>
+    <string name="dg_larcv_common_empty_behavior" translatable="false">com.edus.gankio.ui.widget.EmptyViewDefaultBehavior</string>
+    <string name="dg_larcv_common_error_behavior" translatable="false">com.edus.gankio.ui.widget.ErrorViewDefaultBehavior</string>
+    <string name="dg_larcv_common_loading_behavior" translatable="false">com.edus.gankio.ui.widget.LoadingViewDefaultBehavior</string>
 
 
 </resources>
