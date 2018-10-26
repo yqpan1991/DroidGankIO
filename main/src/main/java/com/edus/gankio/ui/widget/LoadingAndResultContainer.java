@@ -13,8 +13,12 @@ import android.widget.FrameLayout;
 import com.edus.gankio.R;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 页面从加载中,到加载的结果(正常数据结果页,空页面,错误页面)
@@ -22,6 +26,8 @@ import java.util.Map;
 public class LoadingAndResultContainer extends FrameLayout {
     static final ThreadLocal<Map<String, Constructor<LoadingAndResultContainer.Behavior>>> sConstructors =
             new ThreadLocal<>();
+
+    private final String TAG = this.getClass().getSimpleName();
 
     public enum DISPLAY_STATUS {
         LOADING(0),
@@ -115,11 +121,11 @@ public class LoadingAndResultContainer extends FrameLayout {
             displayStatus = DISPLAY_STATUS.fromValue(defaultStatus.intValue());
         }
         ta.recycle();
-        refreshStatus(displayStatus);
+        refreshStatus(displayStatus, false);
     }
 
-    private void refreshStatus(DISPLAY_STATUS displayStatus) {
-        if(isSameStatus(displayStatus)){
+    private void refreshStatus(DISPLAY_STATUS displayStatus, boolean isForce) {
+        if(isSameStatus(displayStatus) && !isForce){
             return;
         }
         if(mDisplayStatus == DISPLAY_STATUS.LOADING){
@@ -131,6 +137,50 @@ public class LoadingAndResultContainer extends FrameLayout {
         }else if(mDisplayStatus == DISPLAY_STATUS.ERROR){
             showError();
         }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        int count = getChildCount();
+        if(count <= 0){
+            return;
+        }
+        List<Integer> validIdList = new ArrayList<>();
+        validIdList.add(R.id.dg_larc_loading_id);
+        validIdList.add(R.id.dg_larc_empty_id);
+        validIdList.add(R.id.dg_larc_error_id);
+        validIdList.add(R.id.dg_larc_content_id);
+        Set<Integer> hittedSet = new HashSet<>();
+        //找到所有的childView,如果id不属于正常的id的列表,那么就抛出异常
+        for(int index = 0; index < count ; index ++){
+            if(!validIdList.contains(getChildAt(index).getId())){
+                throw new RuntimeException("view id is invalid, please check");
+            }
+            View childView = getChildAt(index);
+            if(hittedSet.contains(childView.getId())){
+                throw new RuntimeException("child view id cannot be same in container");
+            }
+            hittedSet.add(childView.getId());
+            if(R.id.dg_larc_loading_id == childView.getId()){
+                if(mLoadingView == null){
+                    mLoadingView = findViewById(R.id.dg_larc_loading_id);
+                }
+            }else if(R.id.dg_larc_empty_id == childView.getId()){
+                if(mEmptyView == null){
+                    mEmptyView = findViewById(R.id.dg_larc_empty_id);
+                }
+            }else if(R.id.dg_larc_error_id == childView.getId()){
+                if(mErrorView == null){
+                    mErrorView = findViewById(R.id.dg_larc_error_id);
+                }
+            }else if(R.id.dg_larc_content_id == childView.getId()){
+                if(mContentView == null){
+                    mContentView = findViewById(R.id.dg_larc_content_id);
+                }
+            }
+        }
+        refreshStatus(mDisplayStatus, true);
     }
 
     public View getLoadingView() {
