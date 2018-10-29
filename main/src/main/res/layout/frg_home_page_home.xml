@@ -4,13 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.edus.gankio.ui.widget.LoadingAndResultContainer
+    <com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer
         android:id="@+id/larc_container"
-        app:loading_behavior="@string/dg_larcv_common_loading_behavior"
-        app:empty_behavior="@string/dg_larcv_common_empty_behavior"
-        app:error_behavior="@string/dg_larcv_common_error_behavior"
-        app:content_behavior="@string/dg_larcv_common_result_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:empty_behavior="@string/edus_larcv_common_empty_behavior"
+        app:loading_behavior="@string/edus_larcv_common_loading_behavior">
+
+        <RelativeLayout
+            android:id="@id/dg_larc_content_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <com.edus.gankio.ui.widget.LoadingErrorView
+            android:id="@id/dg_larc_error_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.edus.gankio.ui.widget.LoadingErrorView>
+
+    </com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer>
+
 
 </RelativeLayout>

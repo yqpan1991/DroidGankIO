@@ -10,16 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.R;
 import com.edus.gankio.ui.adapter.BaseRvAdapter;
-import com.edus.gankio.ui.widget.LoadingAndResultContainer;
+import com.edus.gankio.ui.widget.LoadingErrorView;
 
 
 public abstract class HomeBaseFragment<DataType> extends Fragment {
     private RecyclerView mRvContent;
     private BaseRvAdapter mAdapter;
     private LoadingAndResultContainer mLarcContent;
-    private TextView mTvRetry;
+    private LoadingErrorView mLoadingErrorView;
 
 
     @Nullable
@@ -36,17 +37,16 @@ public abstract class HomeBaseFragment<DataType> extends Fragment {
     }
 
     private void initView(View rootView) {
-        mLarcContent = (LoadingAndResultContainer) rootView.findViewById(R.id.larc_container);
-        mRvContent = (RecyclerView) mLarcContent.getContentView().findViewById(R.id.rv_content);
-        //todo: 此处需要替换为包装后的view
-        mTvRetry = (TextView) mLarcContent.getErrorView().findViewById(R.id.tv_retry);
+        mLarcContent = rootView.findViewById(R.id.larc_container);
+        mRvContent =  mLarcContent.getContentView().findViewById(R.id.rv_content);
+        mLoadingErrorView = (LoadingErrorView) mLarcContent.getErrorView();
     }
 
 
     private void initListener() {
-        mTvRetry.setOnClickListener(new View.OnClickListener() {
+        mLoadingErrorView.setErrorClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 handleRpc();
             }
         });
