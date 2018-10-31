@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer
+        android:id="@+id/larc_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:empty_behavior="@string/edus_larcv_common_empty_behavior"
+        app:loading_behavior="@string/edus_larcv_common_loading_behavior">
+
+        <RelativeLayout
+            android:id="@id/dg_larc_content_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.edus.gankio.ui.widget.recyclerview.DmRecyclerViewWrapper
+                android:id="@+id/rv_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
+        <com.edus.gankio.ui.widget.LoadingErrorView
+            android:id="@id/dg_larc_error_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.edus.gankio.ui.widget.LoadingErrorView>
+
+    </com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer>
+
+
+</RelativeLayout>

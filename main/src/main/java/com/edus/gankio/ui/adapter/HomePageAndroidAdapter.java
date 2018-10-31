@@ -1,5 +1,6 @@
 package com.edus.gankio.ui.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,27 +9,29 @@ import android.widget.TextView;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
+import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
+import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePageAndroidAdapter extends BaseRvAdapter<HomePageAndroidAdapter.ViewHolder, CommonResource> {
-    public HomePageAndroidAdapter(){
+public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
 
+    public HomePageAndroidAdapter(Context context){
+        super(context);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DmBaseViewHolder<CommonResource> onCreateAdapterViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(parent);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        CommonResource data = getDataTypeByPosition(position);
-        holder.refresh(data);
+    public void onBindAdapterViewHolder(DmBaseViewHolder<CommonResource> holder, int dataListPosition) {
+        holder.updateData(getAdapterDataItem(dataListPosition), dataListPosition);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends DmBaseViewHolder<CommonResource> {
         private TextView mTvContent;
         private CommonResource mData;
 
@@ -38,9 +41,15 @@ public class HomePageAndroidAdapter extends BaseRvAdapter<HomePageAndroidAdapter
             mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
 
         }
-        public void refresh(CommonResource data){
+
+        @Override
+        public void updateData(CommonResource data, int position){
             mData = data;
-            mTvContent.setText(mData.desc);
+            if(mData != null){
+                mTvContent.setText(mData.desc);
+            }else{
+                mTvContent.setText(null);
+            }
         }
     }
 }
