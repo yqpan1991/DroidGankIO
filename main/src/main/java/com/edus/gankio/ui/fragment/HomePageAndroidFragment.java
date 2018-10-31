@@ -28,7 +28,7 @@ public class HomePageAndroidFragment extends HomeBaseFragment<CommonResource> {
     }
 
     @Override
-    protected void handleRpc() {
+    protected void handleRpcFirstPage() {
         getLarcContent().showLoading();
         ApiService.getInstance().getAndroidResource(new DataCallback<CommonResult<List<CommonResource>>>() {
             @Override

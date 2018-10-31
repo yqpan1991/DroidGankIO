@@ -25,7 +25,7 @@ public class HomePageHomeFragment extends HomeBaseFragment<String> {
     }
 
     @Override
-    protected void handleRpc() {
+    protected void handleRpcFirstPage() {
         getLarcContent().showLoading();
         ApiService.getInstance().getGanHuoDate(new DataCallback<CommonResult<List<String>>>() {
             @Override

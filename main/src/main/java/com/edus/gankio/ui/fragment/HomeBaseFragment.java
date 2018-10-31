@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.R;
@@ -47,7 +46,7 @@ public abstract class HomeBaseFragment<DataType> extends Fragment {
         mLoadingErrorView.setErrorClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleRpc();
+                handleRpcFirstPage();
             }
         });
     }
@@ -73,7 +72,7 @@ public abstract class HomeBaseFragment<DataType> extends Fragment {
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mAdapter = onCreateAdapter();
         mRvContent.setAdapter(mAdapter);
-        handleRpc();
+        handleRpcFirstPage();
     }
 
     public RecyclerView getRvContent() {
@@ -87,5 +86,5 @@ public abstract class HomeBaseFragment<DataType> extends Fragment {
     /**
      * 加载第一个页
      */
-    protected abstract void handleRpc();
+    protected abstract void handleRpcFirstPage();
 }
