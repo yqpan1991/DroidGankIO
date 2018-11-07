@@ -30,7 +30,7 @@ public class FragmentFactory {
         }else if(homeFragmentType == HomeFragmentType.RECOMMEND){
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.APP){
-            return SampleFragment.getInstance(null);
+            return HomePageMobileAppFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.VIDEO){
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.ERROR){

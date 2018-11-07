@@ -11,6 +11,7 @@ public enum HomeFragmentType {
     FRONT,
     RECOMMEND,
     APP,
+    BONUS,
     VIDEO,
     ERROR
 }

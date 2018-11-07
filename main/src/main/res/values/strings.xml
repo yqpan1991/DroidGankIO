@@ -10,7 +10,8 @@
     <string name="dg_title_tab_ios">iOS</string>
     <string name="dg_title_tab_front">前端</string>
     <string name="dg_title_tab_recommend">瞎推荐</string>
-    <string name="dg_title_tab_app">福利</string>
+    <string name="dg_title_tab_app">app</string>
+    <string name="dg_title_tab_bonus">福利</string>
     <string name="dg_title_tab_videos">休息视频</string>
     <string name="dg_title_tab_error">错误</string>
 
