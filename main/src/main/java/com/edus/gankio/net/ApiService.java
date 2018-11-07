@@ -45,4 +45,12 @@ public class ApiService {
         Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("Android", pageSize, pageIndex);
         android.enqueue(AdapterRestfulCallback.build(callback));
     }
+
+    public void getIOSResource(DataCallback<CommonResult<List<CommonResource>>> callback, int pageSize, int pageIndex){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/data/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+        Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("iOS", pageSize, pageIndex);
+        android.enqueue(AdapterRestfulCallback.build(callback));
+    }
 }

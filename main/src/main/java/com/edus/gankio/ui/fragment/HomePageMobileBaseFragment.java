@@ -14,7 +14,6 @@ import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContain
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
-import com.edus.gankio.net.ApiService;
 import com.edus.gankio.net.DataCallback;
 import com.edus.gankio.ui.adapter.HomePageAndroidAdapter;
 import com.edus.gankio.ui.widget.LoadingErrorView;
@@ -24,7 +23,7 @@ import com.edus.gankio.ui.widget.recyclerview.decoration.LinearItemDividerDecora
 
 import java.util.List;
 
-public class HomePageAndroidFragment extends Fragment {
+public abstract class HomePageMobileBaseFragment extends Fragment {
     private final int PAGE_SIZE = 20;
     private int mNextPageIndex = 1;
 
@@ -32,12 +31,6 @@ public class HomePageAndroidFragment extends Fragment {
     private DmBaseAdapter<CommonResource> mAdapter;
     private LoadingAndResultContainer mLarcContent;
     private LoadingErrorView mLoadingErrorView;
-
-    public static HomePageAndroidFragment getInstance(Bundle bundle){
-        HomePageAndroidFragment homePageHomeFragment = new HomePageAndroidFragment();
-        homePageHomeFragment.setArguments(bundle);
-        return homePageHomeFragment;
-    }
 
     @Nullable
     @Override
@@ -99,7 +92,7 @@ public class HomePageAndroidFragment extends Fragment {
     };
 
     private void handleLoadMore() {
-        ApiService.getInstance().getAndroidResource(new DataCallback<CommonResult<List<CommonResource>>>() {
+        loadResource(new DataCallback<CommonResult<List<CommonResource>>>() {
             @Override
             public void onReceived(CommonResult<List<CommonResource>> data) {
                 if(data != null && !data.error){
@@ -123,6 +116,8 @@ public class HomePageAndroidFragment extends Fragment {
         }, PAGE_SIZE, mNextPageIndex);
     }
 
+    protected abstract void loadResource(DataCallback<CommonResult<List<CommonResource>>> callback, int page_size, int mNextPageIndex);
+
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
@@ -143,7 +138,7 @@ public class HomePageAndroidFragment extends Fragment {
             getLarcContent().showLoading();
         }
         mRvContent.enableRefresh(true);
-        ApiService.getInstance().getAndroidResource(new DataCallback<CommonResult<List<CommonResource>>>() {
+        loadResource(new DataCallback<CommonResult<List<CommonResource>>>() {
             @Override
             public void onReceived(CommonResult<List<CommonResource>> data) {
                 if(userRefresh){

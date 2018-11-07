@@ -22,10 +22,9 @@ public class FragmentFactory {
         if(homeFragmentType == HomeFragmentType.HOME){
             return HomePageHomeFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.ANDROID){
-            return HomePageAndroidFragment.getInstance(null);
-//            return SampleFragment.getInstance(null);
+            return HomePageMobileAndroidFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.IOS){
-            return SampleFragment.getInstance(null);
+            return HomePageMobileIOSFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.RECOMMEND){
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.APP){
