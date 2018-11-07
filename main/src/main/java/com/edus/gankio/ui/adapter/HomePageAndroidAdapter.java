@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
+import com.edus.gankio.ui.adapter.multi.TypePoolImpl;
+import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
@@ -16,19 +18,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
+    private TypePoolImpl mTypePool;
 
     public HomePageAndroidAdapter(Context context){
         super(context);
+        mTypePool = new TypePoolImpl(0);
+        mTypePool.registerType(CommonResource.class, new ViewHolderBinder<HomePageAndroidAdapter.ViewHolder, CommonResource>() {
+
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parentView) {
+                return new ViewHolder(parentView);
+            }
+
+            @Override
+            public void onBindViewHolder(HomePageAndroidAdapter.ViewHolder viewHolder, CommonResource data, int position) {
+                viewHolder.updateData(data, position);
+            }
+        });
+    }
+
+    @Override
+    public int getAdapterItemViewType(int dataListPosition) {
+        return mTypePool.getItemViewType(getAdapterDataItem(dataListPosition));
     }
 
     @Override
     public DmBaseViewHolder<CommonResource> onCreateAdapterViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(parent);
+        return (DmBaseViewHolder<CommonResource>) mTypePool.onCreateViewHolder(viewType, parent);
     }
 
     @Override
     public void onBindAdapterViewHolder(DmBaseViewHolder<CommonResource> holder, int dataListPosition) {
-        holder.updateData(getAdapterDataItem(dataListPosition), dataListPosition);
+        mTypePool.onBindViewHolder(holder, getAdapterDataItem(dataListPosition), dataListPosition);
     }
 
     public static class ViewHolder extends DmBaseViewHolder<CommonResource> {
