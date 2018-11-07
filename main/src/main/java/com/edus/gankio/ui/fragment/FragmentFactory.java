@@ -25,6 +25,8 @@ public class FragmentFactory {
             return HomePageMobileAndroidFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.IOS){
             return HomePageMobileIOSFragment.getInstance(null);
+        }else if(homeFragmentType == HomeFragmentType.FRONT){
+            return HomePageMobileFrontFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.RECOMMEND){
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.APP){

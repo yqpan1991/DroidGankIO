@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_home, HomeFragmentType.HOME));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_android, HomeFragmentType.ANDROID));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_ios, HomeFragmentType.IOS));
+        pageInfoList.add(buildPageInfo(R.string.dg_title_tab_front, HomeFragmentType.FRONT));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_recommend, HomeFragmentType.RECOMMEND));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_app, HomeFragmentType.APP));
         pageInfoList.add(buildPageInfo(R.string.dg_title_tab_videos, HomeFragmentType.VIDEO));

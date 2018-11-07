@@ -8,6 +8,7 @@ public enum HomeFragmentType {
     HOME,
     ANDROID,
     IOS,
+    FRONT,
     RECOMMEND,
     APP,
     VIDEO,
