@@ -31,8 +31,10 @@ public class FragmentFactory {
             return SampleFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.APP){
             return HomePageMobileAppFragment.getInstance(null);
+        }else if(homeFragmentType == HomeFragmentType.BONUS){
+            return HomePageBonusFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.VIDEO){
-            return SampleFragment.getInstance(null);
+            return HomePageMobileVideoFragment.getInstance(null);
         }else if(homeFragmentType == HomeFragmentType.ERROR){
             return SampleFragment.getInstance(null);
         }else{
