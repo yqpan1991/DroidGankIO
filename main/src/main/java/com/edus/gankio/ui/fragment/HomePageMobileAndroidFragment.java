@@ -35,30 +35,7 @@ public class HomePageMobileAndroidFragment extends HomePageMobileBaseFragment {
 
 
     private void registerViewHolderBinder() {
-        getAdapter().registerMultiType(CommonResource.class, new SubTypeLinker<CommonResource>() {
-            private final int SUB_TYPE_TRIPLE_IMAGE = 2;
-            private final int SUB_TYPE_SINGLE_IAMGE = 1;
-            @Override
-            public int getSubType(CommonResource commonResource) {
-                if(commonResource == null){
-                    throw new RuntimeException("commonResouce cannot be null");
-                }
-                if(commonResource.images != null && commonResource.images.size() >= 3){
-                    return SUB_TYPE_TRIPLE_IMAGE;
-                }else{
-                    return SUB_TYPE_SINGLE_IAMGE;
-                }
-            }
 
-            @Override
-            public ViewHolderBinder onCreateViewHolderBinder(int subType, CommonResource commonResource) {
-                if(subType == SUB_TYPE_TRIPLE_IMAGE){
-                    return new TripleImageViewHolderBinder();
-                }else{
-                    return new SingleImageViewHolderBinder();
-                }
-            }
-        });
     }
 
 }

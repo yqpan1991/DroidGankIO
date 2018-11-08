@@ -16,6 +16,10 @@ import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.net.DataCallback;
 import com.edus.gankio.ui.adapter.HomePageAndroidAdapter;
+import com.edus.gankio.ui.adapter.holder.SingleImageViewHolderBinder;
+import com.edus.gankio.ui.adapter.holder.TripleImageViewHolderBinder;
+import com.edus.gankio.ui.adapter.multi.SubTypeLinker;
+import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.LoadingErrorView;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
 import com.edus.gankio.ui.widget.recyclerview.DmRecyclerViewWrapper;
@@ -74,6 +78,32 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         mRvContent.setOnRefreshListener(mOnRefreshListener);
         mAdapter = onCreateAdapter();
         mRvContent.setAdapter(mAdapter);
+
+        getAdapter().registerMultiType(CommonResource.class, new SubTypeLinker<CommonResource>() {
+            private final int SUB_TYPE_TRIPLE_IMAGE = 2;
+            private final int SUB_TYPE_SINGLE_IAMGE = 1;
+            @Override
+            public int getSubType(CommonResource commonResource) {
+                if(commonResource == null){
+                    throw new RuntimeException("commonResouce cannot be null");
+                }
+                if(commonResource.images != null && commonResource.images.size() >= 3){
+                    return SUB_TYPE_TRIPLE_IMAGE;
+                }else{
+                    return SUB_TYPE_SINGLE_IAMGE;
+                }
+            }
+
+            @Override
+            public ViewHolderBinder onCreateViewHolderBinder(int subType, CommonResource commonResource) {
+                if(subType == SUB_TYPE_TRIPLE_IMAGE){
+                    return new TripleImageViewHolderBinder();
+                }else{
+                    return new SingleImageViewHolderBinder();
+                }
+            }
+        });
+
         handleRpcFirstPage(false);
     }
 

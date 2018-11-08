@@ -24,18 +24,6 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
     public HomePageAndroidAdapter(Context context){
         super(context);
         mTypePool = new TypePoolImpl(0, this);
-        registerType(CommonResource.class, new ViewHolderBinder<HomePageAndroidAdapter.ViewHolder, CommonResource>() {
-
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parentView) {
-                return new ViewHolder(parentView);
-            }
-
-            @Override
-            public void onBindViewHolder(HomePageAndroidAdapter.ViewHolder viewHolder, CommonResource data, int position) {
-                viewHolder.updateData(data, position);
-            }
-        });
     }
 
     public void registerType(Class<?> clz, ViewHolderBinder viewHolderBinder){
