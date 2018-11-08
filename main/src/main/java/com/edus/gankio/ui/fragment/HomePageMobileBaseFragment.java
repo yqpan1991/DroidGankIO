@@ -28,7 +28,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
     private int mNextPageIndex = 1;
 
     private DmRecyclerViewWrapper mRvContent;
-    private DmBaseAdapter<CommonResource> mAdapter;
+    private HomePageAndroidAdapter mAdapter;
     private LoadingAndResultContainer mLarcContent;
     private LoadingErrorView mLoadingErrorView;
 
@@ -65,13 +65,6 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mLarcContent.showLoading();
         initData();
-    }
-
-    protected DmBaseAdapter<CommonResource> getAdapter(){
-        if(mAdapter == null){
-            mAdapter = onCreateAdapter();
-        }
-        return mAdapter;
     }
 
     private void initData() {
@@ -125,9 +118,11 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         }
     };
 
+    protected HomePageAndroidAdapter getAdapter(){
+        return mAdapter;
+    }
 
-
-    protected DmBaseAdapter onCreateAdapter() {
+    protected HomePageAndroidAdapter onCreateAdapter() {
         return new HomePageAndroidAdapter(getContext());
     }
 

@@ -121,6 +121,9 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
 
     @Override
     public void registerMultiType(Class<?> clz, SubTypeLinker<?> subTypeLinker) {
+        if(clz == null || subTypeLinker == null){
+            throw new RuntimeException("clz or subTypeLinked cannot be null");
+        }
         mClzBindInfoHashMap.remove(clz);
         ClzBindInfo clzBindInfo = new ClzBindInfo(subTypeLinker);
         mClzBindInfoHashMap.put(clz, clzBindInfo);

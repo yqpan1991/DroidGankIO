@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
+import com.edus.gankio.ui.adapter.multi.SubTypeLinker;
 import com.edus.gankio.ui.adapter.multi.TypePoolImpl;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
@@ -23,7 +24,7 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
     public HomePageAndroidAdapter(Context context){
         super(context);
         mTypePool = new TypePoolImpl(0, this);
-        mTypePool.registerType(CommonResource.class, new ViewHolderBinder<HomePageAndroidAdapter.ViewHolder, CommonResource>() {
+        registerType(CommonResource.class, new ViewHolderBinder<HomePageAndroidAdapter.ViewHolder, CommonResource>() {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parentView) {
@@ -35,6 +36,14 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
                 viewHolder.updateData(data, position);
             }
         });
+    }
+
+    public void registerType(Class<?> clz, ViewHolderBinder viewHolderBinder){
+        mTypePool.registerType(clz, viewHolderBinder);
+    }
+
+    public void registerMultiType(Class<?> clz, SubTypeLinker<?> subTypeLinker){
+        mTypePool.registerMultiType(clz, subTypeLinker);
     }
 
     @Override
