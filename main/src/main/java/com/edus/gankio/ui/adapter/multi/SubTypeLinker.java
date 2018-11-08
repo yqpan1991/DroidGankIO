@@ -1,6 +1,18 @@
 package com.edus.gankio.ui.adapter.multi;
 
 public interface SubTypeLinker<T> {
+    /**
+     * get subType by object, different subType will generate different itemViewType
+     * @param t object
+     * @return itemViewType's value don't have any limitation
+     */
     int getSubType(T t);
-    ViewHolderBinder onCreateViewHolderBinder(T t);
+
+    /**
+     * build ViewHolderBinder
+     * @param subType
+     * @param t
+     * @return
+     */
+    ViewHolderBinder onCreateViewHolderBinder(int subType, T t);
 }

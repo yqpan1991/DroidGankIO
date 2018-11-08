@@ -22,7 +22,7 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
 
     public HomePageAndroidAdapter(Context context){
         super(context);
-        mTypePool = new TypePoolImpl(0);
+        mTypePool = new TypePoolImpl(0, this);
         mTypePool.registerType(CommonResource.class, new ViewHolderBinder<HomePageAndroidAdapter.ViewHolder, CommonResource>() {
 
             @Override

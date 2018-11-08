@@ -1,5 +1,9 @@
 package com.edus.gankio.ui.adapter.multi;
 
+/**
+ * DefaultSubTypeLinker,which just have one subType, so implements class: ViewHolderBinder = 1:1
+ * @param <T>
+ */
 public class DefaultSubTypeLinker<T> implements SubTypeLinker<T> {
     private ViewHolderBinder mViewHolderBinder;
 
@@ -13,7 +17,7 @@ public class DefaultSubTypeLinker<T> implements SubTypeLinker<T> {
     }
 
     @Override
-    public ViewHolderBinder onCreateViewHolderBinder(T t) {
+    public ViewHolderBinder onCreateViewHolderBinder(int subType, T t) {
         return mViewHolderBinder;
     }
 }

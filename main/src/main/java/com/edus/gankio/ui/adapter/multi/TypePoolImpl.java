@@ -6,8 +6,9 @@ import android.view.ViewGroup;
 
 import java.util.HashMap;
 
-public class TypePoolImpl implements TypePool {
-    private int mStartIndex = 0;
+public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypePool<Adapter> {
+    private Adapter mAdapter;
+    private int mItemViewTypeIndex = 0;
 
     private static class BindedInfo{
         int itemViewType;
@@ -25,8 +26,8 @@ public class TypePoolImpl implements TypePool {
             this.subTypeLinker = subTypeLinker;
             subTypeBindedMap = new HashMap<>();
         }
-        public BindedInfo getBindedInfoByKey(int key){
-            return subTypeBindedMap.get(key);
+        public BindedInfo getBindedInfoByKey(int subType){
+            return subTypeBindedMap.get(subType);
         }
         public void putBindedInfo(int subType, BindedInfo bindedInfo){
             subTypeBindedMap.put(subType, bindedInfo);
@@ -36,13 +37,17 @@ public class TypePoolImpl implements TypePool {
     private HashMap<Class, ClzBindInfo> mClzBindInfoHashMap;
     private HashMap<Integer, ViewHolderBinder> mItemViewTypeBinderMap;
 
-    public TypePoolImpl(int startIndex){
+    public TypePoolImpl(int itemViewTypeIndex, Adapter adapter){
         mClzBindInfoHashMap = new HashMap<>();
         mItemViewTypeBinderMap = new HashMap<>();
-        if(startIndex < 0 ){
+        if(itemViewTypeIndex < 0 ){
             throw new RuntimeException("start index cannot be null");
         }
-        mStartIndex = startIndex;
+        if(adapter == null){
+            throw new RuntimeException("adapter cannot be nulls");
+        }
+        mItemViewTypeIndex = itemViewTypeIndex;
+        mAdapter = adapter;
     }
 
     private BindedInfo getBindedInfo(Object t){
@@ -76,14 +81,15 @@ public class TypePoolImpl implements TypePool {
         BindedInfo bindedInfo = clzBindInfo.getBindedInfoByKey(subType);
 
         if(bindedInfo == null){//说明还没有初始化,初始化一次
-            ViewHolderBinder viewHolderBinder = clzBindInfo.subTypeLinker.onCreateViewHolderBinder(t);
+            int itemViewType = mItemViewTypeIndex;
+            ViewHolderBinder viewHolderBinder = clzBindInfo.subTypeLinker.onCreateViewHolderBinder(itemViewType, t);
             if(viewHolderBinder == null){
                 throw new RuntimeException("onCreateViewHolderBinder cannot return null");
             }
-            int itemViewType = mStartIndex;
-            clzBindInfo.putBindedInfo(subType, new BindedInfo(mStartIndex, viewHolderBinder));
+            viewHolderBinder.mAdapter = mAdapter;
+            clzBindInfo.putBindedInfo(subType, new BindedInfo(itemViewType, viewHolderBinder));
             mItemViewTypeBinderMap.put(itemViewType, viewHolderBinder);
-            mStartIndex++;
+            mItemViewTypeIndex++;
             return itemViewType;
         }else{
             return bindedInfo.itemViewType;

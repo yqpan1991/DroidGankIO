@@ -3,7 +3,7 @@ package com.edus.gankio.ui.adapter.multi;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-public interface TypePool {
+public interface TypePool<Adapter extends RecyclerView.Adapter> {
     int getItemViewType(Object t);
 
     RecyclerView.ViewHolder onCreateViewHolder(int itemViewType, ViewGroup parent);
