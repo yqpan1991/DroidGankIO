@@ -82,7 +82,7 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
 
         if(bindedInfo == null){//说明还没有初始化,初始化一次
             int itemViewType = mItemViewTypeIndex;
-            ViewHolderBinder viewHolderBinder = clzBindInfo.subTypeLinker.onCreateViewHolderBinder(itemViewType, t);
+            ViewHolderBinder viewHolderBinder = clzBindInfo.subTypeLinker.onCreateViewHolderBinder(subType, t);
             if(viewHolderBinder == null){
                 throw new RuntimeException("onCreateViewHolderBinder cannot return null");
             }
