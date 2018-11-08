@@ -115,12 +115,12 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
     }
 
     @Override
-    public void registerType(Class<?> clz, ViewHolderBinder viewHolderBinder) {
-        registerMultiType(clz, new DefaultSubTypeLinker<>(viewHolderBinder));
+    public <T> void registerType(Class<T> clz, ViewHolderBinder<RecyclerView.ViewHolder, T> viewHolderBinder) {
+        registerMultiType(clz, new DefaultSubTypeLinker<T>(viewHolderBinder));
     }
 
     @Override
-    public void registerMultiType(Class<?> clz, SubTypeLinker<?> subTypeLinker) {
+    public <T> void registerMultiType(Class<T> clz, SubTypeLinker<T> subTypeLinker) {
         if(clz == null || subTypeLinker == null){
             throw new RuntimeException("clz or subTypeLinked cannot be null");
         }

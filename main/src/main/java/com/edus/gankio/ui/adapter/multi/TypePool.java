@@ -10,8 +10,8 @@ public interface TypePool<Adapter extends RecyclerView.Adapter> {
 
     void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Object t, int position);
 
-    void registerType(Class<?> clz, ViewHolderBinder viewHolderBinder);
+    <T> void registerType(Class<T> clz, ViewHolderBinder<RecyclerView.ViewHolder, T> viewHolderBinder);
 
-    void registerMultiType(Class<?> clz, SubTypeLinker<?> subTypeLinker);
+    <T> void registerMultiType(Class<T> clz, SubTypeLinker<T> subTypeLinker);
 
 }
