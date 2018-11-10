@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * 只有一张图片或者没有图片时的展示,如果没有图片,设置默认图即可
+ * 只有一张/2张图片的展示
  *
  * @author panda
  */

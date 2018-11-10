@@ -16,6 +16,7 @@ import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.net.DataCallback;
 import com.edus.gankio.ui.adapter.HomePageAndroidAdapter;
+import com.edus.gankio.ui.adapter.holder.NoImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.holder.SingleImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.holder.TripleImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.multi.SubTypeLinker;
@@ -82,6 +83,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         getAdapter().registerMultiType(CommonResource.class, new SubTypeLinker<CommonResource>() {
             private final String SUB_TYPE_TRIPLE_IMAGE = "2";
             private final String SUB_TYPE_SINGLE_IAMGE = "1";
+            private final String SUB_TYPE_NO_IAMGE = "3";
             @Override
             public String getSubType(CommonResource commonResource) {
                 if(commonResource == null){
@@ -89,6 +91,8 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
                 }
                 if(commonResource.images != null && commonResource.images.size() >= 3){
                     return SUB_TYPE_TRIPLE_IMAGE;
+                }else if(commonResource.images == null || commonResource.images.isEmpty()){
+                    return SUB_TYPE_NO_IAMGE;
                 }else{
                     return SUB_TYPE_SINGLE_IAMGE;
                 }
@@ -96,8 +100,10 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
 
             @Override
             public ViewHolderBinder onCreateViewHolderBinder(String subType, CommonResource commonResource) {
-                if(subType.equals(SUB_TYPE_TRIPLE_IMAGE)){
+                if(SUB_TYPE_TRIPLE_IMAGE.equals(subType)){
                     return new TripleImageViewHolderBinder();
+                }else if(SUB_TYPE_NO_IAMGE.equals(subType)){
+                    return new NoImageViewHolderBinder();
                 }else{
                     return new SingleImageViewHolderBinder();
                 }
