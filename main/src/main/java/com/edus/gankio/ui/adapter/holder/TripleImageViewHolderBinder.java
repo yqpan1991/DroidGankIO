@@ -1,5 +1,7 @@
 package com.edus.gankio.ui.adapter.holder;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
@@ -19,7 +21,7 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
 
     @Override
     public DmBaseViewHolder<CommonResource> onCreateViewHolder(ViewGroup parentView) {
-        return new SingleImageViewHolder(parentView);
+        return new TripleImageViewHolder(parentView);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
     }
 
 
-    public static class SingleImageViewHolder extends DmBaseViewHolder<CommonResource>{
+    public static class TripleImageViewHolder extends DmBaseViewHolder<CommonResource>{
         private ImageView mIvImage1;
         private ImageView mIvImage2;
         private ImageView mIvImage3;
@@ -36,7 +38,7 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
         private TextView mTvSubTitle;
         private CommonResource mData;
 
-        public SingleImageViewHolder(ViewGroup parentView) {
+        public TripleImageViewHolder(ViewGroup parentView) {
             super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.dm_viewholder_item_tripple_image, parentView, false));
             mIvImage1 = itemView.findViewById(R.id.iv_image1);
             mIvImage2 = itemView.findViewById(R.id.iv_image2);
@@ -48,11 +50,33 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
         @Override
         public void updateData(CommonResource commonResource, int position) {
             mData = commonResource;
-            //todo: 图片的展示
             if(mData != null){
                 mTvTitle.setText(commonResource.desc);
                 mTvSubTitle.setText(commonResource.who);
             }
+            if(mData != null && mData.images != null && mData.images.size() >= 3){
+                Glide.with(itemView.getContext()).load(mData.images.get(0))
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage1);
+                Glide.with(itemView.getContext()).load(mData.images.get(1))
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage2);
+                Glide.with(itemView.getContext()).load(mData.images.get(2))
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage3);
+
+            }else{
+                Glide.with(itemView.getContext()).load(R.mipmap.ic_launcher)
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage1);
+                Glide.with(itemView.getContext()).load(R.mipmap.ic_launcher)
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage2);
+                Glide.with(itemView.getContext()).load(R.mipmap.ic_launcher)
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage3);
+            }
+
         }
     }
 

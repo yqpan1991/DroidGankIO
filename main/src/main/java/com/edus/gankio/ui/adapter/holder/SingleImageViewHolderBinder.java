@@ -1,10 +1,13 @@
 package com.edus.gankio.ui.adapter.holder;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -44,10 +47,22 @@ public class SingleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
         @Override
         public void updateData(CommonResource commonResource, int position) {
             mData = commonResource;
-            //todo: 图片的展示
+            boolean matched  = false;
             if(mData != null){
                 mTvTitle.setText(commonResource.desc);
                 mTvSubTitle.setText(commonResource.who);
+                if(mData.images != null && !mData.images.isEmpty() && !TextUtils.isEmpty(mData.images.get(0))){
+                    matched = true;
+                    Glide.with(itemView.getContext()).load(mData.images.get(0))
+                            .apply(RequestOptions.centerCropTransform()
+                                    .placeholder(R.mipmap.ic_launcher)).into(mIvImage);
+                }
+
+            }
+            if(!matched){
+                Glide.with(itemView.getContext()).load(R.mipmap.ic_launcher)
+                        .apply(RequestOptions.centerCropTransform()
+                                .placeholder(R.mipmap.ic_launcher)).into(mIvImage);
             }
         }
     }
