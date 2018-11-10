@@ -12,12 +12,12 @@ public class DefaultSubTypeLinker<T> implements SubTypeLinker<T> {
     }
 
     @Override
-    public int getSubType(T t) {
-        return 0;
+    public String getSubType(T t) {
+        return "0";
     }
 
     @Override
-    public ViewHolderBinder onCreateViewHolderBinder(int subType, T t) {
+    public ViewHolderBinder onCreateViewHolderBinder(String subType, T t) {
         return mViewHolderBinder;
     }
 }

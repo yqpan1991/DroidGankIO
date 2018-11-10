@@ -80,10 +80,10 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         mRvContent.setAdapter(mAdapter);
 
         getAdapter().registerMultiType(CommonResource.class, new SubTypeLinker<CommonResource>() {
-            private final int SUB_TYPE_TRIPLE_IMAGE = 2;
-            private final int SUB_TYPE_SINGLE_IAMGE = 1;
+            private final String SUB_TYPE_TRIPLE_IMAGE = "2";
+            private final String SUB_TYPE_SINGLE_IAMGE = "1";
             @Override
-            public int getSubType(CommonResource commonResource) {
+            public String getSubType(CommonResource commonResource) {
                 if(commonResource == null){
                     throw new RuntimeException("commonResouce cannot be null");
                 }
@@ -95,8 +95,8 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
             }
 
             @Override
-            public ViewHolderBinder onCreateViewHolderBinder(int subType, CommonResource commonResource) {
-                if(subType == SUB_TYPE_TRIPLE_IMAGE){
+            public ViewHolderBinder onCreateViewHolderBinder(String subType, CommonResource commonResource) {
+                if(subType.equals(SUB_TYPE_TRIPLE_IMAGE)){
                     return new TripleImageViewHolderBinder();
                 }else{
                     return new SingleImageViewHolderBinder();

@@ -6,7 +6,7 @@ public interface SubTypeLinker<T> {
      * @param t object
      * @return itemViewType's value don't have any limitation
      */
-    int getSubType(T t);
+    String getSubType(T t);
 
     /**
      * build ViewHolderBinder
@@ -14,5 +14,5 @@ public interface SubTypeLinker<T> {
      * @param t
      * @return
      */
-    ViewHolderBinder onCreateViewHolderBinder(int subType, T t);
+    ViewHolderBinder onCreateViewHolderBinder(String subType, T t);
 }

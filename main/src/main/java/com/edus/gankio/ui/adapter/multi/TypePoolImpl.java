@@ -20,16 +20,16 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
     }
 
     private static class ClzBindInfo<T> {
-        HashMap<Integer, BindedInfo> subTypeBindedMap;
+        HashMap<String, BindedInfo> subTypeBindedMap;
         SubTypeLinker<T> subTypeLinker;
         public ClzBindInfo(SubTypeLinker<T> subTypeLinker){
             this.subTypeLinker = subTypeLinker;
             subTypeBindedMap = new HashMap<>();
         }
-        public BindedInfo getBindedInfoByKey(int subType){
+        public BindedInfo getBindedInfoByKey(String subType){
             return subTypeBindedMap.get(subType);
         }
-        public void putBindedInfo(int subType, BindedInfo bindedInfo){
+        public void putBindedInfo(String subType, BindedInfo bindedInfo){
             subTypeBindedMap.put(subType, bindedInfo);
         }
     }
@@ -61,7 +61,7 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
         if(clzBindInfo == null || clzBindInfo.subTypeLinker == null){
             throw new RuntimeException(t.getClass().getCanonicalName()+" ClzBindInfo is null or subTypeLinker is null");
         }
-        int subType = clzBindInfo.subTypeLinker.getSubType(t);
+        String subType = clzBindInfo.subTypeLinker.getSubType(t);
         return clzBindInfo.getBindedInfoByKey(subType);
     }
 
@@ -77,7 +77,7 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
         if(clzBindInfo == null || clzBindInfo.subTypeLinker == null){
             throw new RuntimeException(t.getClass().getCanonicalName()+" ClzBindInfo is null or subTypeLinker is null");
         }
-        int subType = clzBindInfo.subTypeLinker.getSubType(t);
+        String subType = clzBindInfo.subTypeLinker.getSubType(t);
         BindedInfo bindedInfo = clzBindInfo.getBindedInfoByKey(subType);
 
         if(bindedInfo == null){//说明还没有初始化,初始化一次
