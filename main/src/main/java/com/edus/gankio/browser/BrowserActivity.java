@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -29,6 +30,8 @@ import com.edus.gankio.R;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
 
+import org.w3c.dom.Text;
+
 public class BrowserActivity extends AppCompatActivity {
 
     private static final int  MENU_ITEM_GROUP_ID = 1;
@@ -36,6 +39,7 @@ public class BrowserActivity extends AppCompatActivity {
     private static final int  MENU_ITEM_BROWSER_REFRESH = 1;
     private static final int  MENU_ITEM_OPEN_WITH_SYS_BROWSER = 2;
     public static final String INTENT_KEY_URL = "INTENT_KEY_URL";
+    public static final String INTENT_KEY_HTML_PART = "INTENT_KEY_HTML_PART";
 
     protected AgentWeb mAgentWeb;
     private LinearLayout mLinearLayout;
@@ -43,6 +47,7 @@ public class BrowserActivity extends AppCompatActivity {
     private TextView mTitleTextView;
     private AlertDialog mAlertDialog;
     private String mUrl;
+    private String mHtmlPart;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +60,8 @@ public class BrowserActivity extends AppCompatActivity {
 
     private void parseIntent() {
         mUrl = getIntent().getStringExtra(INTENT_KEY_URL);
+        mHtmlPart = getIntent().getStringExtra(INTENT_KEY_HTML_PART);
+
     }
 
     private void initView() {
@@ -122,6 +129,16 @@ public class BrowserActivity extends AppCompatActivity {
         return intent;
     }
 
+    public static void startMe(Context context, String htmlPart){
+        if(context == null){
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setClass(context.getApplicationContext(), BrowserActivity.class);
+        intent.putExtra(BrowserActivity.INTENT_KEY_HTML_PART, htmlPart);
+        context.startActivity(intent);
+    }
+
 
     private void initData() {
         long p = System.currentTimeMillis();
@@ -139,7 +156,14 @@ public class BrowserActivity extends AppCompatActivity {
                 .ready()
                 .go(getUrl());
 
-        //mAgentWeb.getUrlLoader().loadUrl(getUrl());
+        if(TextUtils.isEmpty(getUrl()) && !TextUtils.isEmpty(mHtmlPart)){
+            mAgentWeb.getWebCreator().getWebView().getSettings().setSupportZoom(true);
+            mAgentWeb.getWebCreator().getWebView().getSettings().setBuiltInZoomControls(true);
+            mAgentWeb.getWebCreator().getWebView().getSettings().setUseWideViewPort(true);
+            mAgentWeb.getWebCreator().getWebView().getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            mAgentWeb.getWebCreator().getWebView().getSettings().setLoadWithOverviewMode(true);
+            mAgentWeb.getWebCreator().getWebView().loadData(mHtmlPart, "text/html;charset=utf-8", "utf-8");
+        }
 
         long n = System.currentTimeMillis();
         Log.i("Info", "init used time:" + (n - p));

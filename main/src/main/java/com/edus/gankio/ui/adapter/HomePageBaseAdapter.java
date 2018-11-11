@@ -8,20 +8,16 @@ import android.widget.TextView;
 
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
-import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.ui.adapter.multi.SubTypeLinker;
 import com.edus.gankio.ui.adapter.multi.TypePoolImpl;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
+public class HomePageBaseAdapter<DataType> extends DmBaseAdapter<DataType> {
     private TypePoolImpl mTypePool;
 
-    public HomePageAndroidAdapter(Context context){
+    public HomePageBaseAdapter(Context context){
         super(context);
         mTypePool = new TypePoolImpl(0, this);
     }
@@ -40,34 +36,13 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
     }
 
     @Override
-    public DmBaseViewHolder<CommonResource> onCreateAdapterViewHolder(ViewGroup parent, int viewType) {
-        return (DmBaseViewHolder<CommonResource>) mTypePool.onCreateViewHolder(viewType, parent);
+    public DmBaseViewHolder<DataType> onCreateAdapterViewHolder(ViewGroup parent, int viewType) {
+        return (DmBaseViewHolder<DataType>) mTypePool.onCreateViewHolder(viewType, parent);
     }
 
     @Override
-    public void onBindAdapterViewHolder(DmBaseViewHolder<CommonResource> holder, int dataListPosition) {
+    public void onBindAdapterViewHolder(DmBaseViewHolder<DataType> holder, int dataListPosition) {
         mTypePool.onBindViewHolder(holder, getAdapterDataItem(dataListPosition), dataListPosition);
     }
 
-    public static class ViewHolder extends DmBaseViewHolder<CommonResource> {
-        private TextView mTvContent;
-        private CommonResource mData;
-
-
-        public ViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_home_adapter_item, parent, false));
-            mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
-
-        }
-
-        @Override
-        public void updateData(CommonResource data, int position){
-            mData = data;
-            if(mData != null){
-                mTvContent.setText(mData.desc);
-            }else{
-                mTvContent.setText(null);
-            }
-        }
-    }
 }

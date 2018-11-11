@@ -17,7 +17,7 @@ import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.net.DataCallback;
-import com.edus.gankio.ui.adapter.HomePageAndroidAdapter;
+import com.edus.gankio.ui.adapter.HomePageBaseAdapter;
 import com.edus.gankio.ui.adapter.holder.NoImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.holder.SingleImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.holder.TripleImageViewHolderBinder;
@@ -34,7 +34,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
     private int mNextPageIndex = 1;
 
     private DmRecyclerViewWrapper mRvContent;
-    private HomePageAndroidAdapter mAdapter;
+    private HomePageBaseAdapter<CommonResource> mAdapter;
     private LoadingAndResultContainer mLarcContent;
     private LoadingErrorView mLoadingErrorView;
 
@@ -166,12 +166,12 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
         }
     };
 
-    protected HomePageAndroidAdapter getAdapter(){
+    protected HomePageBaseAdapter<CommonResource> getAdapter(){
         return mAdapter;
     }
 
-    protected HomePageAndroidAdapter onCreateAdapter() {
-        return new HomePageAndroidAdapter(getContext());
+    protected HomePageBaseAdapter<CommonResource> onCreateAdapter() {
+        return new HomePageBaseAdapter<>(getContext());
     }
 
     protected void handleRpcFirstPage(final boolean userRefresh) {
