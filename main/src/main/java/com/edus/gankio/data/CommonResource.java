@@ -1,5 +1,7 @@
 package com.edus.gankio.data;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,6 +43,14 @@ public class CommonResource {
     @SerializedName("images")
     @Expose
     public List<String> images = null;
+
+
+    public String getDisplayPublishAt(){
+        if(TextUtils.isEmpty(publishedAt)){
+            return null;
+        }
+        return publishedAt.replace('T', ' ').replace('Z', ' ');
+    }
 
     @Override
     public String toString() {

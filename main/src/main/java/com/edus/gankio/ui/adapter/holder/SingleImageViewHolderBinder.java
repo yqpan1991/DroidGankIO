@@ -4,6 +4,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
+import com.edus.gankio.library.utils.DateUtils;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
@@ -35,6 +36,7 @@ public class SingleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
         private ImageView mIvImage;
         private TextView mTvTitle;
         private TextView mTvSubTitle;
+        private TextView mTvDate;
         private CommonResource mData;
 
         public SingleImageViewHolder(ViewGroup parentView) {
@@ -42,6 +44,7 @@ public class SingleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
             mIvImage = itemView.findViewById(R.id.iv_content);
             mTvTitle = itemView.findViewById(R.id.tv_title);
             mTvSubTitle = itemView.findViewById(R.id.tv_subtitle);
+            mTvDate = itemView.findViewById(R.id.tv_date);
         }
 
         @Override
@@ -51,6 +54,8 @@ public class SingleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
             if(mData != null){
                 mTvTitle.setText(commonResource.desc);
                 mTvSubTitle.setText(commonResource.who);
+                String displayPublishAt = commonResource.getDisplayPublishAt();
+                mTvDate.setText(DateUtils.friendlyTime(displayPublishAt));
                 if(mData.images != null && !mData.images.isEmpty() && !TextUtils.isEmpty(mData.images.get(0))){
                     matched = true;
                     Glide.with(itemView.getContext()).load(mData.images.get(0))

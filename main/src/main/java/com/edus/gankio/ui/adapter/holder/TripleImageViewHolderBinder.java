@@ -4,6 +4,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
+import com.edus.gankio.library.utils.DateUtils;
+import com.edus.gankio.library.utils.DensityUtils;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
@@ -36,7 +38,9 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
         private ImageView mIvImage3;
         private TextView mTvTitle;
         private TextView mTvSubTitle;
+        private TextView mTvDate;
         private CommonResource mData;
+        private int mItemWidth;
 
         public TripleImageViewHolder(ViewGroup parentView) {
             super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.dm_viewholder_item_tripple_image, parentView, false));
@@ -45,6 +49,26 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
             mIvImage3 = itemView.findViewById(R.id.iv_image3);
             mTvTitle = itemView.findViewById(R.id.tv_title);
             mTvSubTitle = itemView.findViewById(R.id.tv_subtitle);
+            mTvDate = itemView.findViewById(R.id.tv_date);
+            mItemWidth = DensityUtils.getScreenWidth(parentView.getContext())/3 - DensityUtils.dp2Px(parentView.getContext(), 10);
+
+            checkResize(mIvImage1);
+            checkResize(mIvImage2);
+            checkResize(mIvImage3);
+
+        }
+
+        private void checkResize(ImageView imageView) {
+            if(imageView == null){
+                return;
+            }
+            if(imageView.getLayoutParams() != null){
+                ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+                if(layoutParams.width != mItemWidth){
+                    layoutParams.width = mItemWidth;
+                    layoutParams.height = mItemWidth;
+                }
+            }
         }
 
         @Override
@@ -53,7 +77,10 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
             if(mData != null){
                 mTvTitle.setText(commonResource.desc);
                 mTvSubTitle.setText(commonResource.who);
+                mTvDate.setText(DateUtils.friendlyTime(commonResource.getDisplayPublishAt()));
             }
+
+
             if(mData != null && mData.images != null && mData.images.size() >= 3){
                 Glide.with(itemView.getContext()).load(mData.images.get(0))
                         .apply(RequestOptions.centerCropTransform()
@@ -76,6 +103,7 @@ public class TripleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
                         .apply(RequestOptions.centerCropTransform()
                                 .placeholder(R.mipmap.ic_launcher)).into(mIvImage3);
             }
+
 
         }
     }

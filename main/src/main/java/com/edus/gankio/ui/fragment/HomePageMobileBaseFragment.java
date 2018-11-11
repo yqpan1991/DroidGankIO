@@ -22,7 +22,6 @@ import com.edus.gankio.ui.adapter.holder.TripleImageViewHolderBinder;
 import com.edus.gankio.ui.adapter.multi.SubTypeLinker;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
 import com.edus.gankio.ui.widget.LoadingErrorView;
-import com.edus.gankio.ui.widget.recyclerview.DmBaseAdapter;
 import com.edus.gankio.ui.widget.recyclerview.DmRecyclerViewWrapper;
 import com.edus.gankio.ui.widget.recyclerview.decoration.LinearItemDividerDecoration;
 
@@ -82,8 +81,8 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
 
         getAdapter().registerMultiType(CommonResource.class, new SubTypeLinker<CommonResource>() {
             private final String SUB_TYPE_TRIPLE_IMAGE = "2";
-            private final String SUB_TYPE_SINGLE_IAMGE = "1";
-            private final String SUB_TYPE_NO_IAMGE = "3";
+            private final String SUB_TYPE_SINGLE_IMAGE = "1";
+            private final String SUB_TYPE_NO_IMAGE = "3";
             @Override
             public String getSubType(CommonResource commonResource) {
                 if(commonResource == null){
@@ -92,9 +91,9 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
                 if(commonResource.images != null && commonResource.images.size() >= 3){
                     return SUB_TYPE_TRIPLE_IMAGE;
                 }else if(commonResource.images == null || commonResource.images.isEmpty()){
-                    return SUB_TYPE_NO_IAMGE;
+                    return SUB_TYPE_NO_IMAGE;
                 }else{
-                    return SUB_TYPE_SINGLE_IAMGE;
+                    return SUB_TYPE_SINGLE_IMAGE;
                 }
             }
 
@@ -102,7 +101,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
             public ViewHolderBinder onCreateViewHolderBinder(String subType, CommonResource commonResource) {
                 if(SUB_TYPE_TRIPLE_IMAGE.equals(subType)){
                     return new TripleImageViewHolderBinder();
-                }else if(SUB_TYPE_NO_IAMGE.equals(subType)){
+                }else if(SUB_TYPE_NO_IMAGE.equals(subType)){
                     return new NoImageViewHolderBinder();
                 }else{
                     return new SingleImageViewHolderBinder();
