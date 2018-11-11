@@ -85,4 +85,12 @@ public class ApiService {
         Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("休息视频", pageSize, pageIndex);
         android.enqueue(AdapterRestfulCallback.build(callback));
     }
+
+    public void getRecommendResource(DataCallback<CommonResult<List<CommonResource>>> callback, int pageSize, int pageIndex){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/data/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+        Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("瞎推荐", pageSize, pageIndex);
+        android.enqueue(AdapterRestfulCallback.build(callback));
+    }
 }
