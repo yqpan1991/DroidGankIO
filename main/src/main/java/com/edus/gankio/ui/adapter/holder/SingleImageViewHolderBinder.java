@@ -3,6 +3,7 @@ package com.edus.gankio.ui.adapter.holder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.edus.gankio.R;
+import com.edus.gankio.browser.BrowserActivity;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.library.utils.DateUtils;
 import com.edus.gankio.ui.adapter.multi.ViewHolderBinder;
@@ -10,6 +11,7 @@ import com.edus.gankio.ui.widget.recyclerview.DmBaseViewHolder;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +47,14 @@ public class SingleImageViewHolderBinder extends ViewHolderBinder<DmBaseViewHold
             mTvTitle = itemView.findViewById(R.id.tv_title);
             mTvSubTitle = itemView.findViewById(R.id.tv_subtitle);
             mTvDate = itemView.findViewById(R.id.tv_date);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mData != null && !TextUtils.isEmpty(mData.url)){
+                        itemView.getContext().startActivity(BrowserActivity.makeIntent(itemView.getContext(), mData.url));
+                    }
+                }
+            });
         }
 
         @Override
