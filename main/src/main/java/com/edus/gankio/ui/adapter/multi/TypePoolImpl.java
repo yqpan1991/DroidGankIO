@@ -115,7 +115,7 @@ public class TypePoolImpl<Adapter extends RecyclerView.Adapter> implements TypeP
     }
 
     @Override
-    public <T> void registerType(Class<T> clz, ViewHolderBinder<RecyclerView.ViewHolder, T> viewHolderBinder) {
+    public <T> void registerType(Class<T> clz, ViewHolderBinder<? extends RecyclerView.ViewHolder, T> viewHolderBinder) {
         registerMultiType(clz, new DefaultSubTypeLinker<T>(viewHolderBinder));
     }
 

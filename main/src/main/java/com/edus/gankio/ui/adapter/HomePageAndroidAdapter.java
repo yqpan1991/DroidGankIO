@@ -26,7 +26,7 @@ public class HomePageAndroidAdapter extends DmBaseAdapter<CommonResource> {
         mTypePool = new TypePoolImpl(0, this);
     }
 
-    public <T> void registerType(Class<T> clz, ViewHolderBinder<RecyclerView.ViewHolder, T> viewHolderBinder){
+    public <T> void registerType(Class<T> clz, ViewHolderBinder<? extends RecyclerView.ViewHolder, T> viewHolderBinder){
         mTypePool.registerType(clz, viewHolderBinder);
     }
 
