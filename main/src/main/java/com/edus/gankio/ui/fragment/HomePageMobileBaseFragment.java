@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.apollo.edus.biz.aop.AopImpl;
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.R;
 import com.edus.gankio.data.CommonResource;
@@ -132,7 +133,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
     };
 
     private void handleLoadMore() {
-        loadResource(new DataCallback<CommonResult<List<CommonResource>>>() {
+        loadResource(AopImpl.getInstance().makeFragmentAop(this, new DataCallback<CommonResult<List<CommonResource>>>() {
             @Override
             public void onReceived(CommonResult<List<CommonResource>> data) {
                 if(data != null && !data.error){
@@ -153,7 +154,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
                 Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
 
             }
-        }, PAGE_SIZE, mNextPageIndex);
+        }), PAGE_SIZE, mNextPageIndex);
     }
 
     protected abstract void loadResource(DataCallback<CommonResult<List<CommonResource>>> callback, int page_size, int mNextPageIndex);
@@ -180,7 +181,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
             getLarcContent().showLoading();
         }
         mRvContent.enableRefresh(true);
-        loadResource(new DataCallback<CommonResult<List<CommonResource>>>() {
+        loadResource(AopImpl.getInstance().makeFragmentAop(this, new DataCallback<CommonResult<List<CommonResource>>>() {
             @Override
             public void onReceived(CommonResult<List<CommonResource>> data) {
                 if(userRefresh){
@@ -216,7 +217,7 @@ public abstract class HomePageMobileBaseFragment extends Fragment {
                 }
 
             }
-        }, PAGE_SIZE, mNextPageIndex);
+        }), PAGE_SIZE, mNextPageIndex);
     }
 
 
