@@ -3,6 +3,8 @@ package com.edus.gankio.net;
 import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.DailyItem;
+import com.edus.gankio.data.XianduCategoryItem;
+import com.edus.gankio.data.XianduSubCategoryItem;
 import com.edus.gankio.library.utils.Singleton;
 import com.google.gson.Gson;
 
@@ -100,6 +102,22 @@ public class ApiService {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/data/").addConverterFactory(GsonConverterFactory.create(gson)).build();
         GitApi gitApi = retrofit.create(GitApi.class);
         Call<CommonResult<List<CommonResource>>> android = gitApi.getResource("瞎推荐", pageSize, pageIndex);
+        android.enqueue(AdapterRestfulCallback.build(callback));
+    }
+
+    public void getXianduCategories(DataCallback<CommonResult<List<XianduCategoryItem>>> callback){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+        Call<CommonResult<List<XianduCategoryItem>>> android = gitApi.getXianduCategories();
+        android.enqueue(AdapterRestfulCallback.build(callback));
+    }
+
+    public void getXianduSubCategoryList(String engName, DataCallback<CommonResult<List<XianduSubCategoryItem>>> callback){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+        Call<CommonResult<List<XianduSubCategoryItem>>> android = gitApi.getXianduSubCategoryList(engName);
         android.enqueue(AdapterRestfulCallback.build(callback));
     }
 }

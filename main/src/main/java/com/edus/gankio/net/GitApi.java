@@ -4,6 +4,8 @@ import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.DailyItem;
 import com.edus.gankio.data.Demo;
+import com.edus.gankio.data.XianduCategoryItem;
+import com.edus.gankio.data.XianduSubCategoryItem;
 
 import java.util.List;
 
@@ -34,5 +36,12 @@ public interface GitApi {
 
     @GET("{resourceType}/{pageSize}/{pageIndex}")
     public Call<CommonResult<List<CommonResource>>> getResource(@Path("resourceType") String resourceType, @Path("pageSize") int pageSize, @Path("pageIndex") int pageIndex);
+
+    @GET("xiandu/categories")
+    public Call<CommonResult<List<XianduCategoryItem>>> getXianduCategories();
+
+    @GET("xiandu/category/{engName}")
+    public Call<CommonResult<List<XianduSubCategoryItem>>> getXianduSubCategoryList(@Path("engName") String engName);
+
 
 }

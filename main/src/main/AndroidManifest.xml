@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".browser.BrowserActivity"/>
+        <activity android:name=".ReadingActivity"/>
     </application>
 
 </manifest>

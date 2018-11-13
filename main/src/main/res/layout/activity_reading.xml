@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer
+        android:id="@+id/larc_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:empty_behavior="@string/edus_larcv_common_empty_behavior"
+        app:loading_behavior="@string/edus_larcv_common_loading_behavior">
+
+        <RelativeLayout
+            android:id="@id/dg_larc_content_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_sub_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <FrameLayout
+                android:id="@+id/fl_container"
+                android:layout_below="@id/rv_sub_category"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
+        <com.edus.gankio.ui.widget.LoadingErrorView
+            android:id="@id/dg_larc_error_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.edus.gankio.ui.widget.LoadingErrorView>
+
+    </com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer>
+
+
+
+</RelativeLayout>

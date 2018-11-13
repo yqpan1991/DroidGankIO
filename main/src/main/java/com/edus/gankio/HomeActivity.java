@@ -1,6 +1,7 @@
 package com.edus.gankio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -87,7 +88,10 @@ public class HomeActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
+                        if(menuItem.getItemId() == R.id.nav_messages){
+                            Intent intent = new Intent(HomeActivity.this, ReadingActivity.class);
+                            startActivity(intent);
+                        }
                         mDrawerLayout.closeDrawers();
                         return true;
                     }
