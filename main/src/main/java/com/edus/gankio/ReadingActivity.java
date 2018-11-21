@@ -12,13 +12,12 @@ import com.apollo.edus.biz.aop.AopImpl;
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.XianduCategoryItem;
-import com.edus.gankio.data.XianduSubCategoryItem;
 import com.edus.gankio.net.ApiService;
 import com.edus.gankio.net.DataCallback;
 import com.edus.gankio.ui.adapter.CategorySelectAdapter;
 import com.edus.gankio.ui.adapter.OnItemSelectListener;
+import com.edus.gankio.ui.fragment.ReadingSecondFragment;
 import com.edus.gankio.ui.widget.LoadingErrorView;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -26,7 +25,6 @@ public class ReadingActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private LoadingAndResultContainer mLarcContainer;
     private RecyclerView mRvCategory;
-    private RecyclerView mRvSubCategory;
     private LoadingErrorView mLoadingErrorView;
 
     private CategorySelectAdapter mCategorySelectAdapter;
@@ -52,13 +50,12 @@ public class ReadingActivity extends AppCompatActivity {
     }
 
     private void handleReloadCategory() {
-        //todo: 重新加载目录
+        handleLoadCategory();
     }
 
     private void initView() {
         mLarcContainer = findViewById(R.id.larc_container);
         mRvCategory = findViewById(R.id.rv_category);
-        mRvSubCategory = findViewById(R.id.rv_sub_category);
         mLoadingErrorView = (LoadingErrorView) mLarcContainer.getErrorView();
     }
 
@@ -116,29 +113,7 @@ public class ReadingActivity extends AppCompatActivity {
 
     private void handleLoadSubCategory(int selectedPosition) {
         final XianduCategoryItem item = mCategorySelectAdapter.getItem(selectedPosition);
-        //先不做缓存
-        if(item == null){
-            return;
-        }
-        ApiService.getInstance().getXianduSubCategoryList(item.enName, AopImpl.getInstance().makeActivityAop(this, new DataCallback<CommonResult<List<XianduSubCategoryItem>>>() {
-            @Override
-            public void onReceived(CommonResult<List<XianduSubCategoryItem>> data) {
-                Log.e(TAG, "isNotNull:"+(data.results != null));
-                Log.e(TAG, "isEmpty:"+(data.results.isEmpty()));
-                if(data != null && !data.error && data.results != null && !data.results.isEmpty()){
-                    Gson gson = new Gson();
-                    Log.e(TAG, "subResult:"+item.enName+",json:"+gson.toJson(data.results));
-                }
-                //todo: 处理异常
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-                Log.e(TAG, "onException:");
-                //todo: 处理异常
-            }
-        }));
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_second_container, ReadingSecondFragment.getInstance(item)).commitAllowingStateLoss();
     }
 
 
