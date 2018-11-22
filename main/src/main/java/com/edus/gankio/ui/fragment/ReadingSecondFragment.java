@@ -100,7 +100,9 @@ public class ReadingSecondFragment extends Fragment {
     }
 
     private void handleLoadContent() {
-
+        XianduSubCategoryItem item = mAdapter.getItem(mSubSelectedCategoryPosition);
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.fl_third_container, ReadingPageContentFragment.getInstance(item)).commitAllowingStateLoss();
     }
 
     private void loadData(final XianduCategoryItem item){
@@ -126,6 +128,7 @@ public class ReadingSecondFragment extends Fragment {
                                 mAdapter.setSelectedPosition(mSubSelectedCategoryPosition);
                             }
                             mLarcContainer.showCommonResult();
+                            handleLoadContent();
                         }
                     }
                 }else{

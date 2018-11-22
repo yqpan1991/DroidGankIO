@@ -4,6 +4,7 @@ import com.edus.gankio.data.CommonResource;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.DailyItem;
 import com.edus.gankio.data.XianduCategoryItem;
+import com.edus.gankio.data.XianduData;
 import com.edus.gankio.data.XianduSubCategoryItem;
 import com.edus.gankio.library.utils.Singleton;
 import com.google.gson.Gson;
@@ -118,6 +119,15 @@ public class ApiService {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://gank.io/api/").addConverterFactory(GsonConverterFactory.create(gson)).build();
         GitApi gitApi = retrofit.create(GitApi.class);
         Call<CommonResult<List<XianduSubCategoryItem>>> android = gitApi.getXianduSubCategoryList(engName);
+        android.enqueue(AdapterRestfulCallback.build(callback));
+    }
+
+    public void getXianduListResource(String categoryId, int pageSize, int pageIndex, DataCallback<CommonResult<List<XianduData>>> callback){
+        Gson gson = new Gson();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://gank.io/api/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+        GitApi gitApi = retrofit.create(GitApi.class);
+
+        Call<CommonResult<List<XianduData>>> android = gitApi.getXianduData(categoryId, pageSize, pageIndex);
         android.enqueue(AdapterRestfulCallback.build(callback));
     }
 }
