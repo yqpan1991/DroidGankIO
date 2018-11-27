@@ -32,12 +32,16 @@ import com.just.agentweb.DefaultWebClient;
 
 import org.w3c.dom.Text;
 
+import apollo.edus.com.share.ShareInterface;
+import apollo.edus.com.share.message.TextMessage;
+
 public class BrowserActivity extends AppCompatActivity {
 
     private static final int  MENU_ITEM_GROUP_ID = 1;
 
     private static final int  MENU_ITEM_BROWSER_REFRESH = 1;
     private static final int  MENU_ITEM_OPEN_WITH_SYS_BROWSER = 2;
+    private static final int  MENU_ITEM_SYSTEM_SHARE = 3;
     public static final String INTENT_KEY_URL = "INTENT_KEY_URL";
     public static final String INTENT_KEY_HTML_PART = "INTENT_KEY_HTML_PART";
 
@@ -92,6 +96,10 @@ public class BrowserActivity extends AppCompatActivity {
                 , MENU_ITEM_OPEN_WITH_SYS_BROWSER
                 , MENU_ITEM_OPEN_WITH_SYS_BROWSER, R.string.dg_open_with_system_browser)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(MENU_ITEM_GROUP_ID
+                , MENU_ITEM_SYSTEM_SHARE
+                , MENU_ITEM_SYSTEM_SHARE, R.string.dg_share)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,8 +111,27 @@ public class BrowserActivity extends AppCompatActivity {
         }else if(item.getItemId() == MENU_ITEM_BROWSER_REFRESH){
             handleRefresh();
             return true;
+        }else if(item.getItemId() == MENU_ITEM_SYSTEM_SHARE){
+            handleShare();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void handleShare() {
+        if(mAgentWeb == null){
+            return;
+        }
+        WebView webView = mAgentWeb.getWebCreator().getWebView();
+        String link = webView.getUrl();
+        String title = webView.getTitle();
+        if(TextUtils.isEmpty(title)){
+            title = link;
+        }
+        TextMessage textMessage = new TextMessage();
+        textMessage.setTitle(title);
+        textMessage.setText(link);
+        ShareInterface.getImpl().shareText(this, textMessage);
     }
 
     private void handleRefresh() {

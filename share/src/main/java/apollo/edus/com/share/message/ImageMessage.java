@@ -1,5 +1,7 @@
 package apollo.edus.com.share.message;
 
+import android.graphics.Bitmap;
+
 /**
  * Description.
  *
@@ -12,7 +14,7 @@ public class ImageMessage extends BaseShareMessage {
     private String localPath;
     private String resId;
     private String url;
-    private boolean needScreenShot;
+    private Bitmap bitmap;
 
     public String getLocalPath() {
         return localPath;
@@ -38,11 +40,12 @@ public class ImageMessage extends BaseShareMessage {
         this.url = url;
     }
 
-    public boolean isNeedScreenShot() {
-        return needScreenShot;
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 
-    public void setNeedScreenShot(boolean needScreenShot) {
-        this.needScreenShot = needScreenShot;
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

@@ -1,8 +1,10 @@
-package apollo.edus.com.share.plugin;
+package apollo.edus.com.share.unit;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import apollo.edus.com.share.IShareCallback;
+import apollo.edus.com.share.ShareConstants;
 import apollo.edus.com.share.message.BaseShareMessage;
 import apollo.edus.com.share.message.ImageMessage;
 import apollo.edus.com.share.message.LinkMessage;
@@ -13,7 +15,12 @@ import apollo.edus.com.share.message.TextMessage;
  *
  * @author panda
  */
-public abstract class BaseSharePlugin implements ISharePlugin {
+public abstract class BaseShareUnit implements IShareUnit {
+    private UnitInfo mUnitInfo;
+
+    public BaseShareUnit(UnitInfo unitInfo){
+        mUnitInfo = unitInfo;
+    }
 
     @Override
     public String getPluginKey() {
@@ -22,7 +29,7 @@ public abstract class BaseSharePlugin implements ISharePlugin {
 
     @Override
     public final boolean isSupported(Activity activity,BaseShareMessage shareMessage) {
-        if(shareMessage == null){
+        if(shareMessage == null || mUnitInfo == null || TextUtils.isEmpty(mUnitInfo.getPkgId())){
             return false;
         }
         if(shareMessage instanceof TextMessage){
@@ -37,11 +44,12 @@ public abstract class BaseSharePlugin implements ISharePlugin {
 
     @Override
     public void share(Activity activity, BaseShareMessage shareMessage, IShareCallback callback) {
+        if(!isSupported(activity, shareMessage)){
+            notifyFailed(callback, shareMessage, ShareConstants.PARAMS_INVALID, null);
+            return;
+        }
         if(shareMessage == null){
-            if(callback != null){
-                //todo: 标记错误码
-                callback.onshareFailed(this, shareMessage, null, null);
-            }
+            notifyFailed(callback, shareMessage, ShareConstants.PARAMS_INVALID, null);
             return;
         }
         if(shareMessage instanceof TextMessage){
@@ -51,8 +59,7 @@ public abstract class BaseSharePlugin implements ISharePlugin {
         }else if(shareMessage instanceof LinkMessage){
             shareLink(activity, (LinkMessage) shareMessage, callback);
         }else{
-            //todo: 标记错误码
-            callback.onshareFailed(this, shareMessage, null ,null);
+            callback.onShareFailed(this, shareMessage, ShareConstants.NOT_SUPPORTED ,null);
         }
     }
 
@@ -65,4 +72,27 @@ public abstract class BaseSharePlugin implements ISharePlugin {
     protected abstract void shareImage(Activity activity, ImageMessage shareMessage, IShareCallback shareCallback);
 
     protected abstract void shareLink(Activity activity, LinkMessage shareMessage, IShareCallback shareCallback);
+
+    protected void notifyStart(IShareCallback callback, BaseShareMessage shareMessage){
+        if(callback != null){
+            callback.onStartShare(this, shareMessage);
+        }
+    }
+
+    protected void notifySucceed(IShareCallback callback, BaseShareMessage shareMessage){
+        if(callback != null){
+            callback.onShareSucceed(this, shareMessage);
+        }
+    }
+
+    protected void notifyFailed(IShareCallback callback, BaseShareMessage shareMessage, String code, String reason){
+        if(callback != null){
+            callback.onShareFailed(this, shareMessage, code, reason);
+        }
+    }
+
+    public UnitInfo getUnitInfo(){
+        return mUnitInfo;
+    }
+
 }

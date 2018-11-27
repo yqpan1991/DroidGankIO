@@ -19,6 +19,7 @@
     <string name="dg_empty_error">出错啦</string>
     <string name="dg_empty_error_retry">重试</string>
     <string name="dg_open_with_system_browser">用系统浏览器打开</string>
+    <string name="dg_share">分享</string>
     <string name="dg_refresh">刷新</string>
 
 </resources>
