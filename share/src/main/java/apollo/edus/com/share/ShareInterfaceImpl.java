@@ -55,6 +55,7 @@ public class ShareInterfaceImpl extends ShareInterface {
             SystemDefaultShareUnit shareUnit = new SystemDefaultShareUnit(unitInfo);
             baseShareUnits.add(shareUnit);
         }
+        //todo: 加载icon
         Bundle bundle = new Bundle();
         bundle.putSerializable(ShareFragment.KEY_SHARE_MESSAGE, shareMessage);
         bundle.putSerializable(ShareFragment.KEY_SHARE_UNIT_LIST, baseShareUnits);

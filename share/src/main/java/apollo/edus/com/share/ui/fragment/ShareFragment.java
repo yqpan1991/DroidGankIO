@@ -25,6 +25,7 @@ import java.util.List;
 import apollo.edus.com.share.R;
 import apollo.edus.com.share.message.BaseShareMessage;
 import apollo.edus.com.share.unit.BaseShareUnit;
+import apollo.edus.com.share.utils.DensityUtils;
 
 /**
  * Description.
@@ -74,11 +75,14 @@ public class ShareFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Window window = getDialog().getWindow();
-        window.setGravity(Gravity.BOTTOM);
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.dimAmount = 0.55f;
-        window.setAttributes(params);
+        final Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = DensityUtils.dp2Px(getActivity(), 200);
+        window.setAttributes(wlp);
 
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false));
@@ -129,6 +133,7 @@ public class ShareFragment extends DialogFragment {
         public void updateData(BaseShareUnit baseShareUnit, int position){
             mShareUnit = baseShareUnit;
             mPosition = position;
+            //todo: 展示icon
             if(baseShareUnit == null || baseShareUnit.getUnitInfo() == null){
                 mIvThumb.setImageBitmap(null);
                 mTvContent.setText(null);
