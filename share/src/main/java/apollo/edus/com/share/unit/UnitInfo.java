@@ -1,6 +1,7 @@
 package apollo.edus.com.share.unit;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 /**
  * Description.
@@ -14,7 +15,7 @@ public class UnitInfo {
     private int iconResId;
     private String iconThumbUrl;
     private String iconLocalPath;
-    private Bitmap iconBitmap;
+    private Drawable iconDrawable;
     private boolean checkExist;
 
     public String getPkgId() {
@@ -57,12 +58,12 @@ public class UnitInfo {
         this.iconLocalPath = iconLocalPath;
     }
 
-    public Bitmap getIconBitmap() {
-        return iconBitmap;
+    public Drawable getIconDrawable() {
+        return iconDrawable;
     }
 
-    public void setIconBitmap(Bitmap iconBitmap) {
-        this.iconBitmap = iconBitmap;
+    public void setIconDrawable(Drawable iconDrawable) {
+        this.iconDrawable = iconDrawable;
     }
 
     public boolean isCheckExist() {

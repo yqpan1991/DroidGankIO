@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.List;
 import apollo.edus.com.share.R;
 import apollo.edus.com.share.message.BaseShareMessage;
 import apollo.edus.com.share.unit.BaseShareUnit;
+import apollo.edus.com.share.unit.UnitInfo;
 import apollo.edus.com.share.utils.DensityUtils;
 
 /**
@@ -33,21 +35,28 @@ import apollo.edus.com.share.utils.DensityUtils;
  * @author panda
  */
 public class ShareFragment extends DialogFragment {
-    public static final String KEY_SHARE_UNIT_LIST = "share_unit";
-    public static final String KEY_SHARE_MESSAGE = "share_msg";
     private RecyclerView mRecyclerView;
     private List<BaseShareUnit> mBaseShareUnitList;
     private BaseShareMessage mShareMessage;
+    private RecyclerViewAdapter mAdapter;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public ShareFragment(){
         mBaseShareUnitList = new ArrayList<>();
-        Bundle arguments = getArguments();
-        if(arguments != null){
-            mBaseShareUnitList = (List<BaseShareUnit>) arguments.getSerializable(KEY_SHARE_UNIT_LIST);
-            mShareMessage = (BaseShareMessage) arguments.getSerializable(KEY_SHARE_MESSAGE);
+    }
+
+    public void setShareUnitList(List<BaseShareUnit> shareUnitList){
+        mBaseShareUnitList.clear();
+        if(shareUnitList != null && !shareUnitList.isEmpty()){
+            mBaseShareUnitList.addAll(shareUnitList);
         }
+        if(mAdapter != null){
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    public void setShareMessage(BaseShareMessage shareMessage){
+        mShareMessage = shareMessage;
     }
 
     @Nullable
@@ -81,13 +90,13 @@ public class ShareFragment extends DialogFragment {
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
         wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        wlp.height = DensityUtils.dp2Px(getActivity(), 200);
+        wlp.height = DensityUtils.dp2Px(getActivity(), 300);
         window.setAttributes(wlp);
 
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false));
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity());
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = new RecyclerViewAdapter(getActivity());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder>{
@@ -133,12 +142,24 @@ public class ShareFragment extends DialogFragment {
         public void updateData(BaseShareUnit baseShareUnit, int position){
             mShareUnit = baseShareUnit;
             mPosition = position;
-            //todo: 展示icon
             if(baseShareUnit == null || baseShareUnit.getUnitInfo() == null){
                 mIvThumb.setImageBitmap(null);
                 mTvContent.setText(null);
             }else{
-                mIvThumb.setImageBitmap(null);
+                UnitInfo unitInfo = baseShareUnit.getUnitInfo();
+                if(unitInfo.getIconResId() > 0){
+                    mIvThumb.setImageResource(unitInfo.getIconResId());
+                }else if(unitInfo.getIconDrawable() != null){
+                    mIvThumb.setImageDrawable(unitInfo.getIconDrawable());
+                }else if(!TextUtils.isEmpty(unitInfo.getIconLocalPath())){
+                    //todo: 加载本地图片
+                    mIvThumb.setImageBitmap(null);
+                }else if(!TextUtils.isEmpty(unitInfo.getIconThumbUrl())){
+                    //todo: 加载网络图片
+                    mIvThumb.setImageBitmap(null);
+                }else{
+                    mIvThumb.setImageBitmap(null);
+                }
                 mTvContent.setText(baseShareUnit.getUnitInfo().getDisplayName());
             }
         }

@@ -37,4 +37,8 @@ public class ShareContext {
         return sSingleton.get();
     }
 
+    public Context getContext(){
+        return mContext;
+    }
+
 }
