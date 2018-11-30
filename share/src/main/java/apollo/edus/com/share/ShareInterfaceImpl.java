@@ -33,7 +33,7 @@ public class ShareInterfaceImpl extends ShareInterface {
     //2. N个分享组件: 1个shareMessage 弹窗分享
 
     @Override
-    public void shareText(AppCompatActivity activity, TextMessage shareMessage) {
+    public void shareText(Activity activity, TextMessage shareMessage) {
         if(activity == null || shareMessage == null){
             return;
         }
@@ -69,14 +69,14 @@ public class ShareInterfaceImpl extends ShareInterface {
     }
 
     @Override
-    public void shareMessage(AppCompatActivity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage) {
+    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage) {
         if(activity == null || shareUnitList == null || shareUnitList.isEmpty() || shareMessage == null){
             return;
         }
         ShareFragment shareFragment = new ShareFragment();
         shareFragment.setShareMessage(shareMessage);
         shareFragment.setShareUnitList(shareUnitList);
-        shareFragment.show(activity.getSupportFragmentManager(),  "share_fragment_for_text");
+        shareFragment.show(activity.getFragmentManager(),  "share_fragment_for_text");
 
     }
 }

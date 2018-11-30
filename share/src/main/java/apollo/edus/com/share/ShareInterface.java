@@ -1,5 +1,6 @@
 package apollo.edus.com.share;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public abstract class ShareInterface {
      * @param activity
      * @param textMessage
      */
-    public void shareText(AppCompatActivity activity, TextMessage textMessage){
+    public void shareText(Activity activity, TextMessage textMessage){
 
     }
 
@@ -30,7 +31,7 @@ public abstract class ShareInterface {
      * @param shareUnitList
      * @param shareMessage
      */
-    public void shareMessage(AppCompatActivity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage){
+    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage){
 
     }
 
