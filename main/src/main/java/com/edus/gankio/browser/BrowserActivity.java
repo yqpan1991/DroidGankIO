@@ -17,22 +17,29 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edus.gankio.R;
+import com.edus.gankio.ui.adapter.BrowserShareAdapter;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import apollo.edus.com.share.IShareCallback;
 import apollo.edus.com.share.ShareInterface;
 import apollo.edus.com.share.message.BaseShareMessage;
+import apollo.edus.com.share.message.LinkMessage;
 import apollo.edus.com.share.message.TextMessage;
 import apollo.edus.com.share.unit.IShareUnit;
 
@@ -46,6 +53,10 @@ public class BrowserActivity extends AppCompatActivity {
     private static final int  MENU_ITEM_SYSTEM_SHARE = 3;
     public static final String INTENT_KEY_URL = "INTENT_KEY_URL";
     public static final String INTENT_KEY_HTML_PART = "INTENT_KEY_HTML_PART";
+
+    private static final int TYPE_TEXT = 0;
+    private static final int TYPE_LINK = 1;
+
 
     protected AgentWeb mAgentWeb;
     private LinearLayout mLinearLayout;
@@ -124,6 +135,71 @@ public class BrowserActivity extends AppCompatActivity {
         if(mAgentWeb == null){
             return;
         }
+        showSelectDialog();
+
+    }
+
+    private void showSelectDialog() {
+        final List<BrowserShareAdapter.SelectItem> selectItemList = new ArrayList<>();
+        BrowserShareAdapter.SelectItem selectItem = new BrowserShareAdapter.SelectItem();
+        selectItem.type = TYPE_TEXT;
+        selectItem.tips = getString(R.string.dg_select_text);
+        selectItemList.add(selectItem);
+        selectItem = new BrowserShareAdapter.SelectItem();
+        selectItem.type = TYPE_LINK;
+        selectItem.tips = getString(R.string.dg_select_link);
+        selectItemList.add(selectItem);
+        BrowserShareAdapter shareAdapter = new BrowserShareAdapter();
+        shareAdapter.setDataList(selectItemList);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setAdapter(shareAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                BrowserShareAdapter.SelectItem selectItem1 = selectItemList.get(which);
+                if(selectItem1 != null){
+                    if(selectItem1.type == TYPE_LINK){
+                        handleShareLink();
+                    }else if(selectItem1.type == TYPE_TEXT){
+                        handleShareText();
+                    }
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+    private void handleShareLink() {
+        WebView webView = mAgentWeb.getWebCreator().getWebView();
+        String link = webView.getUrl();
+        String title = webView.getTitle();
+        if(TextUtils.isEmpty(title)){
+            title = link;
+        }
+        String content = null;
+        LinkMessage linkMessage = new LinkMessage();
+        linkMessage.setUrl(link);
+        linkMessage.setTitle(title);
+        linkMessage.setContent(content);
+        ShareInterface.getImpl().shareLink(this, linkMessage, new IShareCallback() {
+            @Override
+            public void onStartShare(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                Log.e(TAG, "onStartShare");
+            }
+
+            @Override
+            public void onShareSucceed(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                Log.e(TAG, "onShareSucceed");
+            }
+
+            @Override
+            public void onShareFailed(IShareUnit sharePlugin, BaseShareMessage shareMessage, String code, String reason) {
+                Log.e(TAG, "onShareFailed");
+            }
+        });
+    }
+
+    private void handleShareText(){
+
         WebView webView = mAgentWeb.getWebCreator().getWebView();
         String link = webView.getUrl();
         String title = webView.getTitle();
@@ -150,6 +226,7 @@ public class BrowserActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void handleRefresh() {
         if(mAgentWeb != null){

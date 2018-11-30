@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apollo.edus.com.share.message.BaseShareMessage;
+import apollo.edus.com.share.message.LinkMessage;
 import apollo.edus.com.share.message.TextMessage;
 import apollo.edus.com.share.ui.fragment.ShareFragment;
 import apollo.edus.com.share.unit.BaseShareUnit;
@@ -66,6 +67,32 @@ public class ShareInterfaceImpl extends ShareInterface {
         }
 
         shareMessage(activity, baseShareUnits, shareMessage, shareCallback);
+    }
+
+    @Override
+    public void shareLink(Activity activity, LinkMessage linkMessage, IShareCallback shareCallback) {
+        if(activity == null || linkMessage == null || TextUtils.isEmpty(linkMessage.getUrl())){
+            return;
+        }
+        //linkMessage,如果没有三方的分享组件,采用系统的分享,直接拼接链接即可
+        //或者最后采用系统的分享组件即可
+        String title = linkMessage.getTitle();
+        String content = linkMessage.getContent();
+        String linkUrl = linkMessage.getUrl();
+        TextMessage textMessage = new TextMessage();
+        textMessage.setTitle(title);
+        StringBuilder stringBuilder = new StringBuilder();
+        if(!TextUtils.isEmpty(title)){
+            stringBuilder.append(title).append("\n");
+        }
+        if(!TextUtils.isEmpty(content)){
+            stringBuilder.append(content).append("\n");
+        }
+        if(!TextUtils.isEmpty(linkUrl)){
+            stringBuilder.append(linkUrl);
+        }
+        textMessage.setText(stringBuilder.toString());
+        shareText(activity, textMessage, shareCallback);
     }
 
     @Override

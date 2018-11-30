@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 
 import apollo.edus.com.share.message.BaseShareMessage;
+import apollo.edus.com.share.message.LinkMessage;
 import apollo.edus.com.share.message.TextMessage;
 import apollo.edus.com.share.unit.BaseShareUnit;
 
@@ -22,6 +23,10 @@ public abstract class ShareInterface {
      * @param textMessage
      */
     public void shareText(Activity activity, TextMessage textMessage, IShareCallback shareCallback){
+
+    }
+
+    public void shareLink(Activity activity, LinkMessage linkMessage, IShareCallback shareCallback){
 
     }
 

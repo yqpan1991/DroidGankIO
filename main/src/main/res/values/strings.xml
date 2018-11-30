@@ -21,5 +21,7 @@
     <string name="dg_open_with_system_browser">用系统浏览器打开</string>
     <string name="dg_share">分享</string>
     <string name="dg_refresh">刷新</string>
+    <string name="dg_select_text">文本</string>
+    <string name="dg_select_link">链接</string>
 
 </resources>
