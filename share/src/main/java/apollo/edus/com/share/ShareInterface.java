@@ -15,10 +15,21 @@ import apollo.edus.com.share.unit.BaseShareUnit;
  */
 public abstract class ShareInterface {
 
+    /**
+     * 分享文本
+     * @param activity
+     * @param textMessage
+     */
     public void shareText(AppCompatActivity activity, TextMessage textMessage){
 
     }
 
+    /**
+     * 分享消息
+     * @param activity
+     * @param shareUnitList
+     * @param shareMessage
+     */
     public void shareMessage(AppCompatActivity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage){
 
     }

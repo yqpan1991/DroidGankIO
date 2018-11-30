@@ -1,6 +1,7 @@
 package apollo.edus.com.share.message;
 
-import android.graphics.Bitmap;
+
+import java.util.List;
 
 /**
  * Description.
@@ -11,41 +12,31 @@ public class ImageMessage extends BaseShareMessage {
 
     private static final long serialVersionUID = -997236281089920362L;
 
-    private String localPath;
-    private String resId;
-    private String url;
-    private Bitmap bitmap;
+    private List<String> mLocalPathList;
+    private List<Integer> mResIdList;
+    private List<String> mUrlList;
 
-    public String getLocalPath() {
-        return localPath;
+    public List<String> getLocalPathList() {
+        return mLocalPathList;
     }
 
-    public void setLocalPath(String localPath) {
-        this.localPath = localPath;
+    public void setLocalPathList(List<String> localPathList) {
+        mLocalPathList = localPathList;
     }
 
-    public String getResId() {
-        return resId;
+    public List<Integer> getResIdList() {
+        return mResIdList;
     }
 
-    public void setResId(String resId) {
-        this.resId = resId;
+    public void setResIdList(List<Integer> resIdList) {
+        mResIdList = resIdList;
     }
 
-    public String getUrl() {
-        return url;
+    public List<String> getUrlList() {
+        return mUrlList;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public void setUrlList(List<String> urlList) {
+        mUrlList = urlList;
     }
 }
