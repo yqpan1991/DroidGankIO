@@ -33,7 +33,7 @@ public class ShareInterfaceImpl extends ShareInterface {
     //2. N个分享组件: 1个shareMessage 弹窗分享
 
     @Override
-    public void shareText(Activity activity, TextMessage shareMessage) {
+    public void shareText(Activity activity, TextMessage shareMessage, IShareCallback shareCallback) {
         if(activity == null || shareMessage == null){
             return;
         }
@@ -65,17 +65,18 @@ public class ShareInterfaceImpl extends ShareInterface {
             baseShareUnits.add(shareUnit);
         }
 
-        shareMessage(activity, baseShareUnits, shareMessage);
+        shareMessage(activity, baseShareUnits, shareMessage, shareCallback);
     }
 
     @Override
-    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage) {
+    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage, IShareCallback shareCallback) {
         if(activity == null || shareUnitList == null || shareUnitList.isEmpty() || shareMessage == null){
             return;
         }
         ShareFragment shareFragment = new ShareFragment();
         shareFragment.setShareMessage(shareMessage);
         shareFragment.setShareUnitList(shareUnitList);
+        shareFragment.setShareCallback(shareCallback);
         shareFragment.show(activity.getFragmentManager(),  "share_fragment_for_text");
 
     }

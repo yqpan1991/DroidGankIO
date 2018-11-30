@@ -30,12 +30,14 @@ import com.edus.gankio.R;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
 
-import org.w3c.dom.Text;
-
+import apollo.edus.com.share.IShareCallback;
 import apollo.edus.com.share.ShareInterface;
+import apollo.edus.com.share.message.BaseShareMessage;
 import apollo.edus.com.share.message.TextMessage;
+import apollo.edus.com.share.unit.IShareUnit;
 
 public class BrowserActivity extends AppCompatActivity {
+    private final String TAG = this.getClass().getSimpleName();
 
     private static final int  MENU_ITEM_GROUP_ID = 1;
 
@@ -131,7 +133,22 @@ public class BrowserActivity extends AppCompatActivity {
         TextMessage textMessage = new TextMessage();
         textMessage.setTitle(title);
         textMessage.setText(link);
-        ShareInterface.getImpl().shareText(this, textMessage);
+        ShareInterface.getImpl().shareText(this, textMessage, new IShareCallback() {
+            @Override
+            public void onStartShare(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                Log.e(TAG, "onStartShare");
+            }
+
+            @Override
+            public void onShareSucceed(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                Log.e(TAG, "onShareSucceed");
+            }
+
+            @Override
+            public void onShareFailed(IShareUnit sharePlugin, BaseShareMessage shareMessage, String code, String reason) {
+                Log.e(TAG, "onShareFailed");
+            }
+        });
     }
 
     private void handleRefresh() {

@@ -23,9 +23,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import apollo.edus.com.share.IShareCallback;
 import apollo.edus.com.share.R;
 import apollo.edus.com.share.message.BaseShareMessage;
 import apollo.edus.com.share.unit.BaseShareUnit;
+import apollo.edus.com.share.unit.IShareUnit;
 import apollo.edus.com.share.unit.UnitInfo;
 import apollo.edus.com.share.utils.DensityUtils;
 
@@ -38,7 +40,9 @@ public class ShareFragment extends DialogFragment {
     private RecyclerView mRecyclerView;
     private List<BaseShareUnit> mBaseShareUnitList;
     private BaseShareMessage mShareMessage;
+    private IShareCallback mShareCallback;
     private RecyclerViewAdapter mAdapter;
+    private boolean mIsFromSaveState;
 
     public ShareFragment(){
         mBaseShareUnitList = new ArrayList<>();
@@ -57,6 +61,10 @@ public class ShareFragment extends DialogFragment {
 
     public void setShareMessage(BaseShareMessage shareMessage){
         mShareMessage = shareMessage;
+    }
+
+    public void setShareCallback(IShareCallback shareCallback){
+        mShareCallback = shareCallback;
     }
 
     @Nullable
@@ -97,6 +105,10 @@ public class ShareFragment extends DialogFragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false));
         mAdapter = new RecyclerViewAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
+        if(savedInstanceState != null){
+            mIsFromSaveState = true;
+            dismiss();
+        }
     }
 
     private class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder>{
@@ -168,7 +180,32 @@ public class ShareFragment extends DialogFragment {
         @Override
         public void onClick(View v) {
             if(mShareUnit != null){
-                mShareUnit.share(getActivity(), mShareMessage, null);
+                mShareUnit.share(getActivity(), mShareMessage, new IShareCallback() {
+                    @Override
+                    public void onStartShare(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                        if(mShareCallback != null){
+                            mShareCallback.onStartShare(sharePlugin, shareMessage);
+                        }
+                    }
+
+                    @Override
+                    public void onShareSucceed(IShareUnit sharePlugin, BaseShareMessage shareMessage) {
+                        if(mShareCallback != null){
+                            mShareCallback.onShareSucceed(sharePlugin, shareMessage);
+                            mShareCallback = null;
+                        }
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onShareFailed(IShareUnit sharePlugin, BaseShareMessage shareMessage, String code, String reason) {
+                        if(mShareCallback != null){
+                            mShareCallback.onShareFailed(sharePlugin, shareMessage, code, reason);
+                            mShareCallback = null;
+                        }
+                        dismiss();
+                    }
+                });
                 dismiss();
             }
         }

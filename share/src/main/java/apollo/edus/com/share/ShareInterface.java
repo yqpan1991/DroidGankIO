@@ -21,7 +21,7 @@ public abstract class ShareInterface {
      * @param activity
      * @param textMessage
      */
-    public void shareText(Activity activity, TextMessage textMessage){
+    public void shareText(Activity activity, TextMessage textMessage, IShareCallback shareCallback){
 
     }
 
@@ -31,7 +31,8 @@ public abstract class ShareInterface {
      * @param shareUnitList
      * @param shareMessage
      */
-    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList, BaseShareMessage shareMessage){
+    public void shareMessage(Activity activity, List<BaseShareUnit> shareUnitList
+            , BaseShareMessage shareMessage, IShareCallback shareCallback){
 
     }
 
