@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import com.apollo.edus.biz.aop.AopImpl;
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.R;
+import com.edus.gankio.cache.CacheManager;
+import com.edus.gankio.cache.MemoryCache;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.XianduCategoryItem;
 import com.edus.gankio.data.XianduSubCategoryItem;
@@ -111,36 +113,55 @@ public class ReadingSecondFragment extends Fragment {
             return;
         }
         mLarcContainer.setVisibility(View.VISIBLE);
-        ApiService.getInstance().getXianduSubCategoryList(item.enName, AopImpl.getInstance().makeFragmentAop(this, new DataCallback<CommonResult<List<XianduSubCategoryItem>>>() {
-            @Override
-            public void onReceived(CommonResult<List<XianduSubCategoryItem>> data) {
-                Log.e(TAG, "isNotNull:"+(data.results != null));
-                Log.e(TAG, "isEmpty:"+(data.results.isEmpty()));
-                if(data != null){
-                    if(data.error){
-                        mLarcContainer.showError();
-                    }else{
-                        if(data.results == null || data.results.isEmpty()){
-                            mLarcContainer.showEmpty();
-                        }else{
-                            mAdapter.setCategoryList(data.results);
-                            if(mAdapter.getSelectedPos() != mSubSelectedCategoryPosition){
-                                mAdapter.setSelectedPosition(mSubSelectedCategoryPosition);
-                            }
-                            mLarcContainer.showCommonResult();
-                            handleLoadContent();
-                        }
-                    }
-                }else{
-                    mLarcContainer.showEmpty();
+        MemoryCache<XianduSubCategoryItem> subCategoryCache = CacheManager.getInstance().getSubCategoryCache(item.enName);
+        if(subCategoryCache != null){
+            List<XianduSubCategoryItem> dataList = subCategoryCache.getDataList();
+            if(dataList == null || dataList.isEmpty()){
+                mLarcContainer.showEmpty();
+            }else{
+                mAdapter.setCategoryList(dataList);
+                if(mAdapter.getSelectedPos() != mSubSelectedCategoryPosition){
+                    mAdapter.setSelectedPosition(mSubSelectedCategoryPosition);
                 }
+                mLarcContainer.showCommonResult();
+                handleLoadContent();
             }
+        }else{
+            ApiService.getInstance().getXianduSubCategoryList(item.enName, AopImpl.getInstance().makeFragmentAop(this, new DataCallback<CommonResult<List<XianduSubCategoryItem>>>() {
+                @Override
+                public void onReceived(CommonResult<List<XianduSubCategoryItem>> data) {
+                    Log.e(TAG, "isNotNull:"+(data.results != null));
+                    Log.e(TAG, "isEmpty:"+(data.results.isEmpty()));
+                    if(data != null){
+                        if(data.error){
+                            mLarcContainer.showError();
+                        }else{
+                            MemoryCache<XianduSubCategoryItem> memoryCache = new MemoryCache<>(Integer.MAX_VALUE);
+                            memoryCache.setDataList(data.results);
+                            CacheManager.getInstance().putSubCategoryCache(item.enName, memoryCache);
+                            if(data.results == null || data.results.isEmpty()){
+                                mLarcContainer.showEmpty();
+                            }else{
+                                mAdapter.setCategoryList(data.results);
+                                if(mAdapter.getSelectedPos() != mSubSelectedCategoryPosition){
+                                    mAdapter.setSelectedPosition(mSubSelectedCategoryPosition);
+                                }
+                                mLarcContainer.showCommonResult();
+                                handleLoadContent();
+                            }
+                        }
+                    }else{
+                        mLarcContainer.showEmpty();
+                    }
+                }
 
-            @Override
-            public void onException(Throwable throwable) {
-                mLarcContainer.showError();
-            }
-        }));
+                @Override
+                public void onException(Throwable throwable) {
+                    mLarcContainer.showError();
+                }
+            }));
+        }
+
     }
 
 

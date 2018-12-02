@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.apollo.edus.biz.aop.AopImpl;
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
 import com.edus.gankio.R;
+import com.edus.gankio.cache.CacheManager;
+import com.edus.gankio.cache.MemoryCache;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.XianduData;
 import com.edus.gankio.data.XianduSubCategoryItem;
@@ -28,6 +30,7 @@ import com.edus.gankio.ui.widget.LoadingErrorView;
 import com.edus.gankio.ui.widget.recyclerview.DmRecyclerViewWrapper;
 import com.edus.gankio.ui.widget.recyclerview.decoration.LinearItemDividerDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReadingPageContentFragment extends Fragment {
@@ -150,20 +153,41 @@ public class ReadingPageContentFragment extends Fragment {
     };
 
     private void handleLoadMore() {
-        loadResource(AopImpl.getInstance().makeFragmentAop(this, new DataCallback<CommonResult<List<XianduData>>>() {
+        loadResource( new DataCallback<CommonResult<List<XianduData>>>() {
             @Override
             public void onReceived(CommonResult<List<XianduData>> data) {
+                MemoryCache<XianduData> xianDuCache = CacheManager.getInstance().getXianDuCache(mSubCategoryItem.id +  mSubCategoryItem.subCategoryId);;
+                if(xianDuCache == null){
+                    throw new RuntimeException("cache cannot be null");
+                }
+                mNextPageIndex++;
+                xianDuCache.setPageIndex(mNextPageIndex);
+                List<XianduData> dataList = new ArrayList<>();
+                xianDuCache.setDataList(dataList);
+                boolean enableLoadMore = false;
                 if(data != null && !data.error){
-                    if(data.results == null || data.results.size() < PAGE_SIZE){
-                        mRvContent.enableLoadMore(false);
-                    }else{
-                        mNextPageIndex++;
-                        mRvContent.enableLoadMore(true);
+                    if(data.results != null){
                         getAdapter().addDataList(data.results);
                     }
+                    List<XianduData> adapterDataList = getAdapter().getDataList();
+                    if(adapterDataList != null){
+                        dataList.addAll(adapterDataList);
+                    }
+
+                    if(data.results == null || data.results.size() < PAGE_SIZE){
+                        enableLoadMore = false;
+                        mRvContent.enableLoadMore(enableLoadMore);
+                    }else{
+                        enableLoadMore = true;
+                        mRvContent.enableLoadMore(enableLoadMore);
+                    }
+
                 }else{
-                    mRvContent.enableLoadMore(false);
+                    enableLoadMore = false;
+                    mRvContent.enableLoadMore(enableLoadMore);
                 }
+
+                xianDuCache.setHasMore(enableLoadMore);
             }
 
             @Override
@@ -171,7 +195,7 @@ public class ReadingPageContentFragment extends Fragment {
                 Toast.makeText(getActivity(), throwable.toString(), Toast.LENGTH_SHORT).show();
 
             }
-        }), PAGE_SIZE, mNextPageIndex);
+        }, PAGE_SIZE, mNextPageIndex);
     }
 
     protected void loadResource(DataCallback<CommonResult<List<XianduData>>> callback, int page_size, int mNextPageIndex){
@@ -241,31 +265,62 @@ public class ReadingPageContentFragment extends Fragment {
 
             }
         }), PAGE_SIZE, mNextPageIndex);*/
-
+       //1. 获取到缓存中的数据,如果没有或者数据为null时,清除数据,直接请求
+        //2. 数据存在时,更改当前的page信息
+        if(!userRefresh && mSubCategoryItem != null){
+            String key = mSubCategoryItem.id + mSubCategoryItem.subCategoryId;
+            MemoryCache<XianduData> xianDuCache = CacheManager.getInstance().getXianDuCache(key);
+            if(xianDuCache != null && xianDuCache.getPageIndex() >= mNextPageIndex){
+                List<XianduData> dataList = xianDuCache.getDataList();
+                if(dataList != null && !dataList.isEmpty()){
+                    //直接显示结果
+                    getAdapter().setDataList(dataList);
+                    if(!userRefresh){
+                        getLarcContent().showCommonResult();
+                    }
+                    mNextPageIndex = xianDuCache.getPageIndex();
+                    mRvContent.enableLoadMore(xianDuCache.isHasMore());
+                    return;
+                }else{
+                    CacheManager.getInstance().putXianDuCache(key, null);
+                }
+            }
+        }
         loadResource(new DataCallback<CommonResult<List<XianduData>>>() {
             @Override
             public void onReceived(CommonResult<List<XianduData>> data) {
                 if(userRefresh){
                     mRvContent.setRefreshing(false);
                 }
+                mNextPageIndex ++;
+                MemoryCache<XianduData> memoryCache = new MemoryCache<>(PAGE_SIZE);
+                ArrayList<XianduData> dataList = new ArrayList<>();
+                memoryCache.setPageIndex(mNextPageIndex);
+                memoryCache.setDataList(dataList);
                 if(data != null && !data.error){
                     getAdapter().setDataList(data.results);
                     if(!userRefresh){
                         getLarcContent().showCommonResult();
                     }
+                    List<XianduData> adapterDataList = getAdapter().getDataList();
+                    if(adapterDataList != null){
+                        dataList.addAll(adapterDataList);
+                    }
                     if(data.results == null || data.results.size() < PAGE_SIZE){
                         mRvContent.enableLoadMore(false);
+                        memoryCache.setHasMore(false);
                     }else{
                         mRvContent.enableLoadMore(true);
-                        mNextPageIndex ++;
+                        memoryCache.setHasMore(true);
                     }
                 }else{
+                    memoryCache.setHasMore(false);
                     mRvContent.enableLoadMore(false);
                     if(!userRefresh){
                         getLarcContent().showEmpty();
                     }
-
                 }
+                CacheManager.getInstance().putXianDuCache(mSubCategoryItem.id + mSubCategoryItem.subCategoryId, memoryCache);
 
             }
 

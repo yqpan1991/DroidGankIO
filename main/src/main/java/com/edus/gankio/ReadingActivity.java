@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.apollo.edus.biz.aop.AopImpl;
 import com.apollo.edus.uilibrary.widget.loadingandresult.LoadingAndResultContainer;
+import com.edus.gankio.cache.CacheManager;
 import com.edus.gankio.data.CommonResult;
 import com.edus.gankio.data.XianduCategoryItem;
 import com.edus.gankio.net.ApiService;
@@ -73,6 +74,7 @@ public class ReadingActivity extends AppCompatActivity {
         mRvCategory.setAdapter(mCategorySelectAdapter);
         mRvCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
 
+        CacheManager.getInstance();
         handleLoadCategory();
     }
 
@@ -110,6 +112,11 @@ public class ReadingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CacheManager.getInstance().clearAll();
+    }
 
     private void handleLoadSubCategory(int selectedPosition) {
         final XianduCategoryItem item = mCategorySelectAdapter.getItem(selectedPosition);
